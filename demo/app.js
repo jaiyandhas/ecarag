@@ -178,6 +178,116 @@ function selectCase(c) {
   updatePathwayGraph(0);
 }
 
+// Natural Entity & Anchor Extraction from Question
+function getNaturalAnchor(question) {
+  if (!question) return 'Query Anchor';
+  const cleanQ = question.replace(/[?.,!]/g, '').trim();
+  const quoted = question.match(/"([^"]+)"|'([^']+)'/);
+  if (quoted) return quoted[1] || quoted[2];
+
+  const stopWords = new Set(['what', 'who', 'where', 'which', 'when', 'why', 'how', 'is', 'are', 'was', 'were', 'the', 'a', 'an', 'in', 'on', 'of', 'for', 'did', 'does', 'do', 'after', 'his', 'her', 'their', 'name']);
+  const words = cleanQ.split(/\s+/);
+  const phrases = [];
+  let current = [];
+
+  for (let i = 0; i < words.length; i++) {
+    const w = words[i];
+    const isCap = /^[A-Z][a-zA-Z0-9'-]*/.test(w);
+    if (isCap && (i > 0 || !stopWords.has(w.toLowerCase()))) {
+      current.push(w);
+    } else {
+      if (current.length > 0) {
+        phrases.push(current.join(' '));
+        current = [];
+      }
+    }
+  }
+  if (current.length > 0) phrases.push(current.join(' '));
+
+  if (phrases.length > 0) {
+    phrases.sort((a, b) => b.length - a.length);
+    return phrases[0];
+  }
+  return words.slice(0, 3).join(' ');
+}
+
+// Natural Bridge Discovery between Document 1 and Document 2
+function discoverNaturalBridge(doc1, doc2, question) {
+  if (!doc1 || !doc2) return null;
+  const t1 = doc1.text || '';
+  const t2 = doc2.text || '';
+  const title2 = doc2.title || '';
+
+  // 1. Direct title overlap: check if doc2's title or prefix appears in doc1's text
+  const cleanTitle2 = title2.replace(/\s*\([^)]*\)/g, '').trim();
+  if (cleanTitle2.length >= 3 && t1.toLowerCase().includes(cleanTitle2.toLowerCase())) {
+    return cleanTitle2;
+  }
+
+  // 2. Capitalized entity phrase intersection between doc1 text and doc2 text
+  const entityRegex = /\b[A-Z][a-zA-Z0-9]*(?:\s+[A-Z][a-zA-Z0-9]*)+\b/g;
+  const phrases1 = t1.match(entityRegex) || [];
+  for (const phrase of phrases1) {
+    if (phrase.length > 3 && t2.toLowerCase().includes(phrase.toLowerCase()) && !question.toLowerCase().includes(phrase.toLowerCase())) {
+      return phrase;
+    }
+  }
+
+  // 3. Significant common vocabulary words
+  const stopSet = new Set(['the', 'and', 'was', 'were', 'that', 'with', 'from', 'also', 'have', 'been', 'which', 'this', 'first', 'after', 'over', 'into']);
+  const w1 = new Set((t1.toLowerCase().match(/\b[a-z]{4,}\b/g) || []).filter(w => !stopSet.has(w)));
+  const w2 = new Set((t2.toLowerCase().match(/\b[a-z]{4,}\b/g) || []).filter(w => !stopSet.has(w)));
+  const shared = [...w1].filter(w => w2.has(w) && !question.toLowerCase().includes(w));
+  if (shared.length > 0) {
+    return shared.slice(0, 2).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  }
+
+  return cleanTitle2 || 'Interconnecting Entity';
+}
+
+// Natural Query Augmentation Diff
+function getNaturalQueryDiff(h, baseQuestion) {
+  if (!h || !h.query_used || !baseQuestion) return null;
+  const qUsed = h.query_used.trim();
+  if (qUsed.length <= baseQuestion.length) return null;
+
+  const appended = qUsed.slice(baseQuestion.length).trim();
+  if (!appended) return null;
+
+  return {
+    base: baseQuestion,
+    appended: appended.length > 130 ? appended.substring(0, 130) + '...' : appended
+  };
+}
+
+// Natural Passage Text Highlighting
+function highlightPassageTextNatural(text, question, bridgeEntity, answer) {
+  if (!text) return '';
+  let res = text;
+  const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+  // Ground truth answer
+  if (answer && answer.length >= 2) {
+    const rx = new RegExp(`(${esc(answer)})`, 'gi');
+    res = res.replace(rx, '<mark class="hl-answer" title="Ground Truth Answer">$1</mark>');
+  }
+
+  // Naturally discovered bridge
+  if (bridgeEntity && bridgeEntity.length >= 3 && (!answer || !bridgeEntity.toLowerCase().includes(answer.toLowerCase()))) {
+    const rx = new RegExp(`(${esc(bridgeEntity)})`, 'gi');
+    res = res.replace(rx, '<mark class="hl-bridge" title="Naturally Discovered Bridge Context">$1</mark>');
+  }
+
+  // Natural query anchor
+  const anchor = getNaturalAnchor(question);
+  if (anchor && anchor.length >= 3 && (!bridgeEntity || !anchor.toLowerCase().includes(bridgeEntity.toLowerCase()))) {
+    const rx = new RegExp(`(${esc(anchor)})`, 'gi');
+    res = res.replace(rx, '<mark class="hl-anchor" title="Question Anchor">$1</mark>');
+  }
+
+  return res;
+}
+
 // Reset Hop Simulation
 function resetSimulation() {
   pauseAutoplay();
@@ -196,7 +306,7 @@ function resetSimulation() {
   }
 }
 
-// Update Pathway Visualizer Canvas
+// Update Pathway Visualizer Canvas with Natural Data
 function updatePathwayGraph(stepIndex) {
   if (!state.activeCase) return;
   const c = state.activeCase;
@@ -218,8 +328,13 @@ function updatePathwayGraph(stepIndex) {
   const pathwayExplainerText = document.getElementById('pathway-explainer-text');
   const explainerBadge = document.getElementById('explainer-badge');
 
-  if (nodeQueryLabel) nodeQueryLabel.textContent = c.anchor_entity || (c.type === 'comparison' ? 'Parallel Query' : 'Question Subject');
-  if (bridgeBadgeText) bridgeBadgeText.textContent = `⚡ Bridge: ${c.bridge_entity || 'Extracted'}`;
+  const anchor = getNaturalAnchor(c.question);
+  const naturalBridge = (c.hops && c.hops.length >= 2) 
+    ? discoverNaturalBridge(c.hops[0], c.hops[1], c.question) 
+    : 'Connecting Link';
+
+  if (nodeQueryLabel) nodeQueryLabel.textContent = anchor;
+  if (bridgeBadgeText) bridgeBadgeText.textContent = `Bridge: ${naturalBridge}`;
 
   // Reset states
   [nodeQuery, nodeHop1, nodeHop2, nodeHalt].forEach(n => {
@@ -234,10 +349,10 @@ function updatePathwayGraph(stepIndex) {
     if (beamHop1) beamHop1.classList.add('active');
     if (nodeHop1Label) nodeHop1Label.textContent = 'Waiting for Hop 1...';
     if (nodeHop2Label) nodeHop2Label.textContent = 'Waiting for Hop 2...';
-    if (nodeHaltLabel) nodeHaltLabel.textContent = 'θ* Gate Active';
+    if (nodeHaltLabel) nodeHaltLabel.textContent = 'Gating Active';
     if (explainerBadge) explainerBadge.textContent = 'HOP 0: REASONING INITIALIZATION';
     if (pathwayExplainerText) {
-      pathwayExplainerText.innerHTML = `Question identifies <strong>${c.anchor_entity || 'the subject'}</strong>. Because this is a ${c.type} problem, the model must execute a retrieval hop to extract the connecting context.`;
+      pathwayExplainerText.innerHTML = `Question identifies <strong>${anchor}</strong>. The cross-encoder evaluates candidate passages against the query to retrieve the primary anchor fact.`;
     }
   } else if (stepIndex === 1) {
     if (nodeQuery) nodeQuery.classList.add('completed');
@@ -246,10 +361,10 @@ function updatePathwayGraph(stepIndex) {
     if (beamHop2) beamHop2.classList.add('active');
     if (nodeHop1Label) nodeHop1Label.textContent = c.hops[0]?.title || 'Anchor Document';
     if (nodeHop2Label) nodeHop2Label.textContent = 'Next: Bridge Traversal';
-    if (nodeHaltLabel) nodeHaltLabel.textContent = 'θ* Gate Active';
-    if (explainerBadge) explainerBadge.textContent = 'HOP 1 COMPLETE: BRIDGE EXTRACTED';
+    if (nodeHaltLabel) nodeHaltLabel.textContent = 'Gating Active';
+    if (explainerBadge) explainerBadge.textContent = 'HOP 1 COMPLETE: CONTEXT APPENDED';
     if (pathwayExplainerText) {
-      pathwayExplainerText.innerHTML = `Hop 1 retrieved <strong>${c.hops[0]?.title}</strong>. Extracted bridge clue: <strong style="color: #1A7F37;">${c.bridge_entity || 'Bridge Link'}</strong> (${c.bridge_clue || 'connecting clue'}). Query is now reformulated for Hop 2.`;
+      pathwayExplainerText.innerHTML = `Hop 1 retrieved <strong>${c.hops[0]?.title}</strong>. Retrieved text is concatenated into the prompt ($q_1 = q_0 \\oplus d_{(1)}$), naturally introducing bridge context (<strong>${naturalBridge}</strong>) to guide Hop 2.`;
     }
   } else if (stepIndex >= 2) {
     if (nodeQuery) nodeQuery.classList.add('completed');
@@ -260,17 +375,17 @@ function updatePathwayGraph(stepIndex) {
     if (beamHalt) beamHalt.classList.add('active');
     if (nodeHop1Label) nodeHop1Label.textContent = c.hops[0]?.title || 'Anchor Document';
     if (nodeHop2Label) nodeHop2Label.textContent = c.hops[1]?.title || 'Target Document';
-    
+
     if (stepIndex >= c.hops.length || c.hops[stepIndex - 1]?.will_halt_arm5) {
       if (nodeHalt) nodeHalt.classList.add('completed', 'active');
-      if (nodeHaltLabel) nodeHaltLabel.textContent = `Halted at Hop ${stepIndex} (θ* passed)`;
+      if (nodeHaltLabel) nodeHaltLabel.textContent = `Halted at Hop ${stepIndex} (Threshold Passed)`;
     } else {
       if (nodeHaltLabel) nodeHaltLabel.textContent = 'Continuing Iteration...';
     }
 
     if (explainerBadge) explainerBadge.textContent = 'HOP 2 COMPLETE: EVIDENCE ASSEMBLED';
     if (pathwayExplainerText) {
-      pathwayExplainerText.innerHTML = `Hop 2 traversed bridge into <strong>${c.hops[1]?.title}</strong>. Resolved ground truth answer: <strong style="color: #B25E00;">${c.answer_span || c.answer}</strong>. Calibrated gating threshold shields prompt from subsequent distractors.`;
+      pathwayExplainerText.innerHTML = `Hop 2 traversed the augmented context into <strong>${c.hops[1]?.title}</strong>. Required evidence assembled: <strong>${c.answer}</strong>. Calibrated confidence gating stops further traversal to prevent distractor drift.`;
     }
   }
 }
@@ -351,48 +466,13 @@ function runHopSequence() {
   stepForward();
 }
 
-// Helper to highlight entities in passage text
-function highlightPassageText(text, c) {
-  if (!c || !text) return text;
-  let highlighted = text;
-
-  // Answer spans
-  if (c.highlights?.answer) {
-    c.highlights.answer.forEach(kw => {
-      if (kw && kw.length > 2) {
-        const regex = new RegExp(`(${kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-        highlighted = highlighted.replace(regex, '<mark class="hl-answer" title="Target Answer Span">$1</mark>');
-      }
-    });
-  }
-
-  // Bridge entities
-  if (c.highlights?.bridge) {
-    c.highlights.bridge.forEach(kw => {
-      if (kw && kw.length > 2) {
-        const regex = new RegExp(`(${kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-        highlighted = highlighted.replace(regex, '<mark class="hl-bridge" title="Bridge Entity">$1</mark>');
-      }
-    });
-  }
-
-  // Anchor entities
-  if (c.highlights?.anchor) {
-    c.highlights.anchor.forEach(kw => {
-      if (kw && kw.length > 2) {
-        const regex = new RegExp(`(${kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-        highlighted = highlighted.replace(regex, '<mark class="hl-anchor" title="Anchor Entity">$1</mark>');
-      }
-    });
-  }
-
-  return highlighted;
-}
-
 // Render an Individual Hop Card
 function renderHopCard(h, index) {
   const c = state.activeCase;
-  
+  const naturalBridge = (c.hops && c.hops.length >= 2) 
+    ? discoverNaturalBridge(c.hops[0], c.hops[1], c.question) 
+    : 'Connecting Link';
+
   // If hop > 0, inject query augmentation bubble first
   if (index > 0) {
     const bubble = document.createElement('div');
@@ -407,71 +487,72 @@ function renderHopCard(h, index) {
   const card = document.createElement('div');
   card.className = `hop-card ${h.is_gold ? 'gold-found' : ''}`;
 
-  // Role Banner
+  // Role Banner (No Emojis)
   let roleBannerHtml = '';
   if (index === 0) {
     roleBannerHtml = `
       <div class="hop-role-banner anchor">
-        <span>🔍 <strong>Phase 1: Anchor Discovery</strong> — Initial retrieval maps question subject</span>
+        <span><strong>Phase 1: Anchor Discovery</strong> &mdash; Initial scoring resolves question subject</span>
         <span>Hop 1 of ${c.hops.length}</span>
       </div>
     `;
   } else if (index === 1) {
     roleBannerHtml = `
       <div class="hop-role-banner bridge">
-        <span>⚡ <strong>Phase 2: Bridge Traversal</strong> — Cross-attention focused via Hop 1 bridge context</span>
+        <span><strong>Phase 2: Bridge Traversal</strong> &mdash; Cross-attention focused via appended context</span>
         <span>Hop 2 of ${c.hops.length}</span>
       </div>
     `;
   } else {
     roleBannerHtml = `
       <div class="hop-role-banner halt">
-        <span>🛡️ <strong>Phase 3: Sufficiency Evaluation</strong> — Gating candidate against distractor cutoff</span>
+        <span><strong>Phase 3: Sufficiency Evaluation</strong> &mdash; Gating candidate against confidence cutoff</span>
         <span>Hop ${index + 1} of ${c.hops.length}</span>
       </div>
     `;
   }
 
-  // Discovered Bridge / Answer Callout Box
+  // Discovered Bridge / Answer Callout Box (No Emojis)
   let calloutHtml = '';
-  if (index === 0 && c.bridge_entity) {
+  if (index === 0 && naturalBridge) {
     calloutHtml = `
       <div class="hop-bridge-callout">
-        <div class="callout-icon">🔗</div>
         <div class="callout-body">
-          <strong>Discovered Bridge Clue:</strong> <span class="diff-highlight">${c.bridge_entity}</span>. 
-          ${c.bridge_clue || 'Reveals the connecting entity required to resolve the second hop.'}
+          <strong>Discovered Bridge Context:</strong> <span class="diff-highlight">${naturalBridge}</span>. 
+          Uncovered entity from retrieved passage concatenated into prompt for Hop 2.
         </div>
       </div>
     `;
-  } else if (index === 1 && c.answer_span) {
+  } else if (index === 1 && c.answer) {
     calloutHtml = `
       <div class="hop-bridge-callout" style="border-left-color: #F5A623;">
-        <div class="callout-icon">🏆</div>
         <div class="callout-body">
-          <strong>Discovered Target Answer:</strong> <span class="diff-highlight" style="color: #B25E00;">${c.answer_span}</span>. 
-          Cross-attention on bridge context unlocked the supporting facility and answer span.
+          <strong>Target Answer Resolved:</strong> <span class="diff-highlight" style="color: #B25E00;">${c.answer}</span>. 
+          Cross-attention on appended bridge context unlocked the supporting evidence.
         </div>
       </div>
     `;
   }
 
-  // Query Reformulation Diff
+  // Natural Query Reformulation Diff
   let diffHtml = '';
   if (index > 0) {
-    diffHtml = `
-      <div class="hop-diff-inspector">
-        <div class="diff-title">Query Reformulation Diff (q<sub>${index-1}</sub> → q<sub>${index}</sub>)</div>
-        <div class="diff-content">
-          <span style="color: #64748B;">[Base Query]:</span> ${c.question}<br>
-          <span style="color: #0284C7; font-weight: 600;">+ [Injected Context]:</span> ${c.query_diff?.added || h.query_used.substring(c.question.length, c.question.length + 110) + '...'}<br>
-          <span style="color: #10B981; font-weight: 600;">⚡ [Cross-Attention Focus]:</span> ${c.query_diff?.attention_shift || 'Shifted attention toward bridge entity tokens.'}
+    const diff = getNaturalQueryDiff(h, c.question);
+    if (diff) {
+      diffHtml = `
+        <div class="hop-diff-inspector">
+          <div class="diff-title">Query Reformulation Diff (q<sub>${index-1}</sub> &rarr; q<sub>${index}</sub>)</div>
+          <div class="diff-content">
+            <span style="color: #64748B;">[Base Query]:</span> ${c.question}<br>
+            <span style="color: #0284C7; font-weight: 600;">+ [Appended Context]:</span> ${diff.appended}<br>
+            <span style="color: #10B981; font-weight: 600;">[Cross-Attention Focus]:</span> Token intersection redirects attention toward '${naturalBridge}'.
+          </div>
         </div>
-      </div>
-    `;
+      `;
+    }
   }
 
-  const highlightedText = highlightPassageText(h.text, c);
+  const highlightedText = highlightPassageTextNatural(h.text, c.question, naturalBridge, c.answer);
 
   card.innerHTML = `
     ${roleBannerHtml}
@@ -481,7 +562,7 @@ function renderHopCard(h, index) {
         <div class="hop-article-title">${h.title}</div>
       </div>
       <span class="hop-status-pill ${h.is_gold ? 'gold' : 'distractor'}">
-        ${h.is_gold ? '✓ Gold Supporting Fact' : 'Candidate Traversed'}
+        ${h.is_gold ? 'Gold Supporting Fact' : 'Candidate Traversed'}
       </span>
     </div>
     ${calloutHtml}
@@ -497,7 +578,7 @@ function renderHopCard(h, index) {
         <span class="metric-value ${h.prob >= state.thetaOverride ? 'highlight-green' : ''}">${(h.prob * 100).toFixed(1)}%</span>
       </div>
       <div class="metric-item">
-        <span class="metric-label">Threshold Gate (θ*=${state.thetaOverride}):</span>
+        <span class="metric-label">Threshold Gate (&theta;*=${state.thetaOverride}):</span>
         <span class="metric-value ${h.prob >= state.thetaOverride ? 'highlight-green' : ''}">
           ${h.prob >= state.thetaOverride ? 'PASSED (Continue)' : 'BELOW (Halt)'}
         </span>
@@ -712,7 +793,7 @@ function renderArmComparator() {
         ${c.arm2_ranked_ids.slice(0, 2).map((idx, i) => `
           <div class="arm-chunk-pill ${c.gold_chunk_ids.includes(idx) ? 'gold' : ''}">
             <span>Chunk #${idx}: ${c.chunks[idx]?.title || ''}</span>
-            <span>${c.gold_chunk_ids.includes(idx) ? '✓ Gold' : 'Distractor'}</span>
+            <span>${c.gold_chunk_ids.includes(idx) ? 'Gold Fact' : 'Distractor'}</span>
           </div>
         `).join('')}
       </div>
@@ -742,7 +823,7 @@ function renderArmComparator() {
         ${c.hops.slice(0, s.arm5.k).map(h => `
           <div class="arm-chunk-pill ${h.is_gold ? 'gold' : ''}">
             <span>Hop ${h.hop_num}: ${h.title}</span>
-            <span>${h.is_gold ? '✓ Gold' : 'Distractor'}</span>
+            <span>${h.is_gold ? 'Gold Fact' : 'Distractor'}</span>
           </div>
         `).join('')}
       </div>
@@ -771,7 +852,7 @@ function renderArmComparator() {
         ${c.hops.slice(0, s.arm6.k).map(h => `
           <div class="arm-chunk-pill ${h.is_gold ? 'gold' : ''}">
             <span>Hop ${h.hop_num}: ${h.title}</span>
-            <span>${h.is_gold ? '✓ Gold' : 'Distractor'}</span>
+            <span>${h.is_gold ? 'Gold Fact' : 'Distractor'}</span>
           </div>
         `).join('')}
       </div>
@@ -872,43 +953,39 @@ function setupEventListeners() {
   }
 }
 
-// Execute Search from Input
+// Execute Search from Input Naturally
 function executeSearch() {
   const q = queryInput.value.trim().toLowerCase();
   if (!q) return;
 
-  // Search through existing cases
-  const found = state.cases.find(c => 
+  // 1. Direct or partial question match
+  let matched = state.cases.find(c => 
     c.question.toLowerCase().includes(q) || 
-    q.includes(c.question.toLowerCase()) ||
-    c.anchor_entity?.toLowerCase().includes(q) ||
-    c.bridge_entity?.toLowerCase().includes(q)
+    q.includes(c.question.toLowerCase())
   );
 
-  if (found) {
-    selectCase(found);
-  } else {
-    // Dynamically synthesize a custom case from user query
-    const base = state.cases[0];
-    const customCase = JSON.parse(JSON.stringify(base));
-    customCase.question = queryInput.value.trim();
-    customCase.id = 'custom_' + Date.now().toString(36);
-    
-    // Heuristic entity detection from question
-    const words = customCase.question.split(/\s+/);
-    const potentialEntities = words.filter(w => /^[A-Z]/.test(w) && w.length > 3);
-    const anchor = potentialEntities.slice(0, 2).join(' ') || words.slice(1, 4).join(' ');
-    
-    customCase.anchor_entity = anchor || 'Extracted Query Entity';
-    customCase.bridge_entity = 'Connecting Entity Link';
-    customCase.bridge_clue = `Discovers the connecting document linking '${customCase.anchor_entity}' to target evidence`;
-    customCase.highlights = {
-      anchor: [anchor],
-      bridge: [customCase.hops[0]?.title, 'Ice Arena'],
-      answer: [customCase.answer]
-    };
-    
-    selectCase(customCase);
+  // 2. Token overlap similarity match against available benchmark cases
+  if (!matched) {
+    const qTokens = new Set(q.split(/\s+/).filter(w => w.length > 2));
+    let bestScore = -1;
+    let bestCase = state.cases[0];
+
+    for (const c of state.cases) {
+      const cTokens = new Set(c.question.toLowerCase().split(/\s+/));
+      let overlap = 0;
+      for (const t of qTokens) {
+        if (cTokens.has(t)) overlap++;
+      }
+      if (overlap > bestScore) {
+        bestScore = overlap;
+        bestCase = c;
+      }
+    }
+    matched = bestCase;
+  }
+
+  if (matched) {
+    selectCase(matched);
   }
   runHopSequence();
 }
@@ -919,7 +996,7 @@ function toggleAutoplay() {
     pauseAutoplay();
   } else {
     state.isPlaying = true;
-    btnAutoplay.textContent = 'Pause ❚❚';
+    btnAutoplay.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg><span>Pause</span>';
     btnAutoplay.classList.add('primary');
     state.playTimer = setInterval(() => {
       const hops = state.activeCase ? state.activeCase.hops : [];
@@ -935,7 +1012,7 @@ function toggleAutoplay() {
 function pauseAutoplay() {
   state.isPlaying = false;
   if (state.playTimer) clearInterval(state.playTimer);
-  btnAutoplay.textContent = 'Auto Play ▶';
+  btnAutoplay.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg><span>Auto Play</span>';
   btnAutoplay.classList.remove('primary');
 }
 

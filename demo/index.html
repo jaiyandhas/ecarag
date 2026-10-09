@@ -82,7 +82,7 @@
           >
           <div class="spotlight-shortcut" id="run-btn" title="Run Retrieval">
             <span>Run Retrieval</span>
-            <kbd>⏎</kbd>
+            <kbd>Enter</kbd>
           </div>
         </div>
 
@@ -118,9 +118,12 @@
             <button class="apple-btn secondary icon-btn" id="btn-reset" title="Reset Simulation">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
             </button>
-            <button class="apple-btn secondary" id="btn-step-prev" title="Previous Hop">‹ Prev</button>
-            <button class="apple-btn primary" id="btn-step-next" title="Next Hop">Next Hop ›</button>
-            <button class="apple-btn secondary play-btn" id="btn-autoplay" title="Auto Play">Auto Play ▶</button>
+            <button class="apple-btn secondary" id="btn-step-prev" title="Previous Hop">Prev</button>
+            <button class="apple-btn primary" id="btn-step-next" title="Next Hop">Next Hop</button>
+            <button class="apple-btn secondary play-btn" id="btn-autoplay" title="Auto Play">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <span>Auto Play</span>
+            </button>
           </div>
         </div>
         <div class="active-question-display" id="active-question-text">
@@ -136,16 +139,16 @@
               <span class="pathway-eyebrow">GRAPH REASONING ENGINE</span>
               <button class="topology-toggle-btn" id="btn-toggle-topology" title="Toggle Topology Theory">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-                <span>Why Hops Behave Differently</span>
+                <span>Topology Dynamics</span>
               </button>
             </div>
-            <h3 class="pathway-heading">Multi-Hop Traversal & Bridge Pathway</h3>
+            <h3 class="pathway-heading">Multi-Hop Traversal &amp; Bridge Pathway</h3>
           </div>
           <div class="pathway-legend">
             <span class="legend-pill blue"><span class="legend-dot"></span>Question Subject</span>
-            <span class="legend-pill green"><span class="legend-dot"></span>Bridge Clue (Hop 1→2)</span>
+            <span class="legend-pill green"><span class="legend-dot"></span>Bridge Clue</span>
             <span class="legend-pill gold"><span class="legend-dot"></span>Target Answer</span>
-            <span class="legend-pill orange"><span class="legend-dot"></span>Calibrated Gate (θ*)</span>
+            <span class="legend-pill orange"><span class="legend-dot"></span>Calibrated Gate</span>
           </div>
         </div>
 
@@ -154,12 +157,14 @@
           <!-- Node 0: Question -->
           <div class="pathway-node active" id="node-query">
             <div class="node-icon-wrapper">
-              <div class="node-icon">❓</div>
+              <div class="node-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              </div>
               <div class="node-pulse-ring"></div>
             </div>
             <div class="node-details">
               <span class="node-role-badge query">Hop 0: Query</span>
-              <span class="node-main-label" id="node-query-label">Adelaide Adrenaline</span>
+              <span class="node-main-label" id="node-query-label">Question Subject</span>
               <span class="node-sub-label">Anchor Entity In Question</span>
             </div>
           </div>
@@ -175,7 +180,9 @@
           <!-- Node 1: Anchor Fact -->
           <div class="pathway-node" id="node-hop1">
             <div class="node-icon-wrapper">
-              <div class="node-icon">📄</div>
+              <div class="node-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              </div>
               <div class="node-pulse-ring"></div>
             </div>
             <div class="node-details">
@@ -191,7 +198,9 @@
               <div class="beam-glow-pulse"></div>
             </div>
             <div class="bridge-token-badge" id="bridge-token-badge">
-              <span class="bridge-bolt">⚡</span>
+              <span class="bridge-bolt">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              </span>
               <span class="bridge-text" id="bridge-badge-text">Bridge Entity</span>
             </div>
           </div>
@@ -199,7 +208,9 @@
           <!-- Node 2: Target Fact -->
           <div class="pathway-node" id="node-hop2">
             <div class="node-icon-wrapper">
-              <div class="node-icon">🎯</div>
+              <div class="node-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+              </div>
               <div class="node-pulse-ring"></div>
             </div>
             <div class="node-details">
@@ -214,19 +225,21 @@
             <div class="beam-track">
               <div class="beam-glow-pulse"></div>
             </div>
-            <span class="beam-tag" id="beam-halt-label">θ* Gate</span>
+            <span class="beam-tag" id="beam-halt-label">&theta;* Gate</span>
           </div>
 
           <!-- Node 3: Halting / Sufficiency Node -->
           <div class="pathway-node" id="node-halt">
             <div class="node-icon-wrapper">
-              <div class="node-icon">🛡️</div>
+              <div class="node-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
               <div class="node-pulse-ring"></div>
             </div>
             <div class="node-details">
               <span class="node-role-badge halt">Adaptive Halting</span>
               <span class="node-main-label" id="node-halt-label">Stopping Check</span>
-              <span class="node-sub-label">P(gold) &lt; θ* Prevents Drift</span>
+              <span class="node-sub-label">P(gold) &lt; &theta;* Prevents Drift</span>
             </div>
           </div>
         </div>
