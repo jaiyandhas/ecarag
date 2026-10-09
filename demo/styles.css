@@ -1095,36 +1095,162 @@ body {
   border-radius: var(--radius-pill);
 }
 
-/* Text Entity Highlighting with Tooltips */
+/* ==========================================================================
+   Intuitive Decision Words Inspector (Words that Decided Retrieval)
+   ========================================================================== */
+.hop-decision-inspector {
+  background: #FFFFFF;
+  border: 1.5px solid #E5E7EB;
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  margin-bottom: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  animation: slideDownFade 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hop-decision-inspector.bridge-variant {
+  border-color: rgba(52, 199, 89, 0.35);
+  background: linear-gradient(180deg, #FAFCFA 0%, #FFFFFF 100%);
+}
+
+.decision-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.decision-eyebrow {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #64748B;
+}
+
+.decision-source-tag {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  background: rgba(0, 113, 227, 0.08);
+  color: #0071E3;
+}
+
+.decision-source-tag.bridge {
+  background: rgba(52, 199, 89, 0.12);
+  color: #1A7F37;
+}
+
+.decision-tokens-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.decision-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  animation: tokenPulse 2.4s infinite ease-in-out;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.decision-chip.anchor {
+  background: #EFF6FF;
+  border: 1.5px solid #93C5FD;
+  color: #1D4ED8;
+}
+
+.decision-chip.bridge {
+  background: #F0FDF4;
+  border: 1.5px solid #86EFAC;
+  color: #15803D;
+}
+
+.decision-chip.target {
+  background: #FEFCE8;
+  border: 1.5px solid #FDE047;
+  color: #A16207;
+}
+
+.decision-chip.context {
+  background: #F8FAFC;
+  border: 1px solid #CBD5E1;
+  color: #475569;
+}
+
+@keyframes tokenPulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04); }
+  50% { transform: scale(1.03); box-shadow: 0 3px 10px rgba(0, 113, 227, 0.15); }
+}
+
+.decision-caption {
+  font-size: 12px;
+  color: #64748B;
+  line-height: 1.4;
+}
+
+/* Text Entity Highlighting with Glowing Indicators */
 mark.hl-anchor {
   background: rgba(0, 113, 227, 0.12);
   color: #0056B3;
-  padding: 1px 6px;
+  padding: 2px 7px;
   border-radius: 4px;
-  border-bottom: 2px solid #0071E3;
-  font-weight: 600;
+  border-bottom: 2.5px solid #0071E3;
+  font-weight: 700;
+  box-shadow: 0 0 8px rgba(0, 113, 227, 0.15);
+  animation: subtleGlow 3s infinite;
 }
 
 mark.hl-bridge {
-  background: rgba(52, 199, 89, 0.16);
-  color: #1B7A38;
-  padding: 2px 7px;
+  background: rgba(52, 199, 89, 0.18);
+  color: #166534;
+  padding: 2px 8px;
   border-radius: 5px;
-  border: 1px solid rgba(52, 199, 89, 0.35);
-  font-weight: 700;
-  box-shadow: 0 1px 4px rgba(52, 199, 89, 0.12);
-  position: relative;
+  border: 1.5px solid rgba(52, 199, 89, 0.5);
+  font-weight: 800;
+  box-shadow: 0 0 12px rgba(52, 199, 89, 0.25);
   display: inline-block;
+  animation: subtleGlowGreen 3s infinite;
 }
 
 mark.hl-answer {
-  background: rgba(245, 166, 35, 0.18);
-  color: #B25E00;
-  padding: 2px 7px;
+  background: rgba(245, 166, 35, 0.2);
+  color: #92400E;
+  padding: 2px 8px;
   border-radius: 5px;
-  border: 1px solid rgba(245, 166, 35, 0.4);
-  font-weight: 700;
-  box-shadow: 0 1px 4px rgba(245, 166, 35, 0.15);
+  border: 1.5px solid rgba(245, 166, 35, 0.6);
+  font-weight: 800;
+  box-shadow: 0 0 12px rgba(245, 166, 35, 0.3);
+  display: inline-block;
+  animation: subtleGlowGold 3s infinite;
+}
+
+@keyframes subtleGlow {
+  0%, 100% { box-shadow: 0 0 4px rgba(0, 113, 227, 0.1); }
+  50% { box-shadow: 0 0 12px rgba(0, 113, 227, 0.3); }
+}
+
+@keyframes subtleGlowGreen {
+  0%, 100% { box-shadow: 0 0 4px rgba(52, 199, 89, 0.15); }
+  50% { box-shadow: 0 0 16px rgba(52, 199, 89, 0.4); }
+}
+
+@keyframes subtleGlowGold {
+  0%, 100% { box-shadow: 0 0 4px rgba(245, 166, 35, 0.2); }
+  50% { box-shadow: 0 0 16px rgba(245, 166, 35, 0.45); }
+}
+
+@keyframes slideDownFade {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* Rich Hop Card Enhancements */

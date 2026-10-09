@@ -460,18 +460,72 @@ function stepBackward() {
   }
 }
 
-// Run the full sequence smoothly
+// Extract the specific decision words that drove the retrieval of this hop
+function extractDecisionTokens(hopIndex, currentChunk, prevChunk, question, answer) {
+  if (hopIndex === 0) {
+    const anchor = getNaturalAnchor(question);
+    const stopWords = new Set(['what', 'who', 'where', 'which', 'when', 'why', 'how', 'is', 'are', 'was', 'were', 'the', 'a', 'an', 'in', 'on', 'of', 'for', 'did', 'does', 'do', 'play', 'also', 'first', 'home', 'that']);
+    const qWords = question.toLowerCase().replace(/[?.,!]/g, '').split(/\s+/).filter(w => w.length > 3 && !stopWords.has(w));
+    const matchingQWords = qWords.filter(w => currentChunk.text.toLowerCase().includes(w));
+    const tokenSet = new Set([anchor, ...matchingQWords.map(w => w.charAt(0).toUpperCase() + w.slice(1))]);
+    return {
+      type: 'anchor',
+      sourceLabel: 'Question Lexical Anchor',
+      chips: [...tokenSet].slice(0, 3),
+      caption: `Cross-encoder scored highest attention on question subject '${anchor}' to retrieve this passage.`
+    };
+  } else {
+    const bridge = discoverNaturalBridge(prevChunk, currentChunk, question);
+    const tokenSet = new Set([bridge]);
+    if (answer && currentChunk.text.toLowerCase().includes(answer.toLowerCase())) {
+      tokenSet.add(answer);
+    }
+    const titleClean = currentChunk.title.replace(/\s*\([^)]*\)/g, '').trim();
+    if (titleClean && titleClean !== bridge) {
+      tokenSet.add(titleClean);
+    }
+    return {
+      type: 'bridge',
+      sourceLabel: `Bridge Clue from Hop ${hopIndex}`,
+      chips: [...tokenSet].slice(0, 3),
+      caption: `Appending Hop ${hopIndex} text injected '${bridge}', redirecting cross-attention to unlock this passage.`
+    };
+  }
+}
+
+// Run retrieval with automatic autoplay and fluid hop transitions
 function runHopSequence() {
   resetSimulation();
+
+  // Set autoplay active
+  state.isPlaying = true;
+  btnAutoplay.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg><span>Pause</span>';
+  btnAutoplay.classList.add('primary');
+
+  // Step Hop 1 immediately
   stepForward();
+
+  // Automatically advance subsequent hops smoothly
+  if (state.playTimer) clearInterval(state.playTimer);
+  state.playTimer = setInterval(() => {
+    const hops = state.activeCase ? state.activeCase.hops : [];
+    if (state.currentHopIndex < hops.length) {
+      stepForward();
+    } else {
+      pauseAutoplay();
+    }
+  }, 1400);
 }
 
 // Render an Individual Hop Card
 function renderHopCard(h, index) {
   const c = state.activeCase;
+  const prevChunk = index > 0 ? c.hops[index - 1] : null;
   const naturalBridge = (c.hops && c.hops.length >= 2) 
     ? discoverNaturalBridge(c.hops[0], c.hops[1], c.question) 
     : 'Connecting Link';
+
+  const decision = extractDecisionTokens(index, h, prevChunk, c.question, c.answer);
 
   // If hop > 0, inject query augmentation bubble first
   if (index > 0) {
@@ -487,7 +541,7 @@ function renderHopCard(h, index) {
   const card = document.createElement('div');
   card.className = `hop-card ${h.is_gold ? 'gold-found' : ''}`;
 
-  // Role Banner (No Emojis)
+  // Role Banner
   let roleBannerHtml = '';
   if (index === 0) {
     roleBannerHtml = `
@@ -512,27 +566,23 @@ function renderHopCard(h, index) {
     `;
   }
 
-  // Discovered Bridge / Answer Callout Box (No Emojis)
-  let calloutHtml = '';
-  if (index === 0 && naturalBridge) {
-    calloutHtml = `
-      <div class="hop-bridge-callout">
-        <div class="callout-body">
-          <strong>Discovered Bridge Context:</strong> <span class="diff-highlight">${naturalBridge}</span>. 
-          Uncovered entity from retrieved passage concatenated into prompt for Hop 2.
-        </div>
+  // Intuitive Decision Words Inspector
+  const decisionHtml = `
+    <div class="hop-decision-inspector ${index > 0 ? 'bridge-variant' : ''}">
+      <div class="decision-header">
+        <span class="decision-eyebrow">Words Deciding Retrieval</span>
+        <span class="decision-source-tag ${index > 0 ? 'bridge' : ''}">${decision.sourceLabel}</span>
       </div>
-    `;
-  } else if (index === 1 && c.answer) {
-    calloutHtml = `
-      <div class="hop-bridge-callout" style="border-left-color: #F5A623;">
-        <div class="callout-body">
-          <strong>Target Answer Resolved:</strong> <span class="diff-highlight" style="color: #B25E00;">${c.answer}</span>. 
-          Cross-attention on appended bridge context unlocked the supporting evidence.
-        </div>
+      <div class="decision-tokens-row">
+        ${decision.chips.map((tok, i) => `
+          <span class="decision-chip ${i === 0 ? (index === 0 ? 'anchor' : 'bridge') : (i === 1 && tok === c.answer ? 'target' : 'context')}">
+            ${tok}
+          </span>
+        `).join('')}
       </div>
-    `;
-  }
+      <div class="decision-caption">${decision.caption}</div>
+    </div>
+  `;
 
   // Natural Query Reformulation Diff
   let diffHtml = '';
@@ -556,6 +606,7 @@ function renderHopCard(h, index) {
 
   card.innerHTML = `
     ${roleBannerHtml}
+    ${decisionHtml}
     <div class="hop-header">
       <div class="hop-title-left">
         <div class="hop-badge-num">${h.hop_num}</div>
@@ -565,7 +616,6 @@ function renderHopCard(h, index) {
         ${h.is_gold ? 'Gold Supporting Fact' : 'Candidate Traversed'}
       </span>
     </div>
-    ${calloutHtml}
     ${diffHtml}
     <div class="hop-text-preview">${highlightedText}</div>
     <div class="hop-metrics-strip">
