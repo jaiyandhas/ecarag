@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ECA-RAG • Interactive Multi-Hop Retrieval Studio</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Ambient Apple Light Glow Background -->
+  <div class="ambient-glow"></div>
+
+  <!-- Navigation Bar -->
+  <header class="app-nav">
+    <div class="nav-content">
+      <div class="nav-brand">
+        <div class="brand-symbol">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">ECA-RAG</span>
+          <span class="brand-badge">Research Lab</span>
+        </div>
+      </div>
+
+      <div class="nav-segmented-control" id="nav-mode-selector">
+        <button class="segment-btn active" data-mode="studio">Hop Studio</button>
+        <button class="segment-btn" data-mode="comparator">Arm Comparator</button>
+        <button class="segment-btn" data-mode="calibration">Calibration Sandbox</button>
+      </div>
+
+      <div class="nav-actions">
+        <span class="paper-tag">IEEE TKDE 2026</span>
+        <a href="../ECA-RAG_final.pdf" target="_blank" class="paper-btn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+          <span>View Paper</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-container">
+    <!-- Hero Header -->
+    <section class="hero-section">
+      <div class="hero-pill">
+        <span class="pulse-dot"></span>
+        <span>Hop-Conditioned Calibrated Retrieval</span>
+      </div>
+      <h1 class="hero-title">Experience Multi-Hop Retrieval in Real Time.</h1>
+      <p class="hero-subtitle">
+        Type a multi-hop query or select a benchmark case. Watch how <strong>ECA-RAG</strong> reformulates context across hops, applies type-conditioned Platt scaling, and halts adaptively.
+      </p>
+
+      <!-- Spotlight Search & Input Field -->
+      <div class="spotlight-wrapper">
+        <div class="spotlight-box" id="spotlight-box">
+          <div class="spotlight-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </div>
+          <input 
+            type="text" 
+            id="query-input" 
+            class="spotlight-input" 
+            placeholder="Type a multi-hop question (e.g. 'The arena in which Adelaide Adrenaline play...')" 
+            autocomplete="off"
+            spellcheck="false"
+          >
+          <div class="spotlight-shortcut" id="run-btn" title="Run Retrieval">
+            <span>Run Retrieval</span>
+            <kbd>⏎</kbd>
+          </div>
+        </div>
+
+        <!-- Autocomplete & Quick Suggestions Dropdown -->
+        <div class="suggestions-dropdown hidden" id="suggestions-dropdown">
+          <div class="dropdown-header">Benchmark Cases (HotpotQA)</div>
+          <div class="dropdown-list" id="dropdown-list">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Quick Filter Chips -->
+        <div class="quick-chips-bar">
+          <span class="chips-label">Presets:</span>
+          <div class="chips-list" id="preset-chips">
+            <!-- Injected via JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 1: STUDIO (HOP BY HOP VISUALIZER) -->
+    <section class="view-panel active" id="view-studio">
+      <!-- Active Query Metadata Card -->
+      <div class="query-meta-card" id="query-meta-card">
+        <div class="meta-card-header">
+          <div class="meta-badge-group">
+            <span class="type-badge bridge" id="meta-type-badge">Bridge Question</span>
+            <span class="gold-badge" id="meta-golds-badge">2 Gold Supporting Chunks</span>
+            <span class="id-badge" id="meta-id-badge">ID: 5ab2b6fb</span>
+          </div>
+          <div class="playback-controls">
+            <button class="apple-btn secondary icon-btn" id="btn-reset" title="Reset Simulation">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+            </button>
+            <button class="apple-btn secondary" id="btn-step-prev" title="Previous Hop">‹ Prev</button>
+            <button class="apple-btn primary" id="btn-step-next" title="Next Hop">Next Hop ›</button>
+            <button class="apple-btn secondary play-btn" id="btn-autoplay" title="Auto Play">Auto Play ▶</button>
+          </div>
+        </div>
+        <div class="active-question-display" id="active-question-text">
+          Select or type a question above to start the multi-hop reasoning simulation.
+        </div>
+      </div>
+
+      <!-- Hop Traversal Stage (Timeline & Cards) -->
+      <div class="hops-traversal-container">
+        <!-- Progress Stepper Track -->
+        <div class="hops-stepper-bar">
+          <div class="stepper-title">Reasoning Sequence</div>
+          <div class="stepper-nodes" id="stepper-nodes">
+            <!-- Injected dynamically -->
+          </div>
+        </div>
+
+        <!-- Dynamic Hops Display Canvas -->
+        <div class="hops-flow-canvas" id="hops-flow-canvas">
+          <!-- Hop cards will animate in here -->
+        </div>
+
+        <!-- Halting & Assembled Outcome Box -->
+        <div class="retrieval-outcome-box hidden" id="retrieval-outcome-box">
+          <!-- Injected dynamically upon completion -->
+        </div>
+      </div>
+
+      <!-- Candidate Inspection & Gating Drawer -->
+      <div class="candidate-inspection-grid">
+        <!-- Left: Candidate Pool & Score Bar -->
+        <div class="panel-card candidate-pool-card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <h3 class="card-title">Candidate Chunks Pool</h3>
+              <span class="card-subtitle">Bi-encoder candidate pool for current query</span>
+            </div>
+            <span class="pill-metric" id="pool-size-metric">10 Candidates</span>
+          </div>
+          <div class="candidate-chunks-list" id="candidate-chunks-list">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Right: Platt Calibration & Gating Physics -->
+        <div class="panel-card calibration-gauge-card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <h3 class="card-title">Confidence & Gating Physics</h3>
+              <span class="card-subtitle">Platt Calibrated Probability $P(\text{gold} \mid s)$</span>
+            </div>
+            <span class="pill-metric green" id="gauge-status-pill">Active Hop</span>
+          </div>
+
+          <div class="calibration-telemetry">
+            <!-- Big Probability Meter -->
+            <div class="meter-hero">
+              <div class="meter-number" id="meter-prob-val">0.00%</div>
+              <div class="meter-label">Calibrated Gold Probability</div>
+              <div class="meter-formula" id="meter-formula">
+                P(gold | s) = σ(a · s + b)
+              </div>
+            </div>
+
+            <!-- Parameters Grid -->
+            <div class="telemetry-grid">
+              <div class="telemetry-cell">
+                <span class="cell-label">Raw Cross-Encoder</span>
+                <span class="cell-val" id="cell-raw-score">--</span>
+              </div>
+              <div class="telemetry-cell">
+                <span class="cell-label">Platt Slope (a)</span>
+                <span class="cell-val" id="cell-platt-a">0.245</span>
+              </div>
+              <div class="telemetry-cell">
+                <span class="cell-label">Platt Intercept (b)</span>
+                <span class="cell-val" id="cell-platt-b">-1.362</span>
+              </div>
+              <div class="telemetry-cell">
+                <span class="cell-label">Gating Threshold (θ*)</span>
+                <span class="cell-val" id="cell-threshold">0.220</span>
+              </div>
+            </div>
+
+            <!-- Live Sigmoid Curve Canvas -->
+            <div class="sigmoid-canvas-wrapper">
+              <canvas id="sigmoid-canvas" width="340" height="150"></canvas>
+              <div class="sigmoid-legend">
+                <span class="legend-dot green"></span> Live Chunk Confidence
+                <span class="legend-dot orange"></span> Halting Cutoff (θ*)
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: COMPARATOR (SIDE-BY-SIDE ABLATION) -->
+    <section class="view-panel" id="view-comparator">
+      <div class="panel-hero">
+        <h2 class="section-title">Side-by-Side Arm Ablation Arena</h2>
+        <p class="section-desc">
+          Compare how different retrieval depths and architectures handle this exact query. Notice the sharp divergence between static $k=2$ and hop-conditioned iteration.
+        </p>
+      </div>
+
+      <div class="arm-comparator-grid" id="arm-comparator-grid">
+        <!-- Injected via JS -->
+      </div>
+
+      <div class="empirical-summary-banner" id="empirical-summary-banner">
+        <!-- Empirical paper stats injected -->
+      </div>
+    </section>
+
+    <!-- SECTION 3: CALIBRATION & THRESHOLD SANDBOX -->
+    <section class="view-panel" id="view-calibration">
+      <div class="panel-hero">
+        <h2 class="section-title">Calibration & Stopper Sandbox</h2>
+        <p class="section-desc">
+          Tune the confidence gating threshold $\theta^*$ and sufficiency classifier threshold $\tau^*$. Observe how calibration aligns model logits with empirical precision.
+        </p>
+      </div>
+
+      <div class="sandbox-controls-card">
+        <div class="slider-group">
+          <div class="slider-label-row">
+            <span class="slider-name">Confidence Gating Threshold ($\theta^*$)</span>
+            <span class="slider-val-badge" id="slider-theta-val">0.22</span>
+          </div>
+          <input type="range" id="slider-theta" min="0.05" max="0.50" step="0.01" value="0.22" class="apple-slider">
+          <div class="slider-hint">
+            Lower $\theta^*$ takes more hops (higher recall, higher depth $k$). Higher $\theta^*$ stops conservatively.
+          </div>
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-label-row">
+            <span class="slider-name">Sufficiency Stopper Cutoff ($\tau^*$, Arm 6)</span>
+            <span class="slider-val-badge" id="slider-tau-val">0.70</span>
+          </div>
+          <input type="range" id="slider-tau" min="0.20" max="0.95" step="0.05" value="0.70" class="apple-slider">
+          <div class="slider-hint">
+            Arm 6 fires when accumulated candidate coverage reaches sufficiency probability $\ge \tau^*$.
+          </div>
+        </div>
+      </div>
+
+      <!-- Calibration Empirical Metrics Table -->
+      <div class="calibration-table-card">
+        <div class="card-header">
+          <h3 class="card-title">Empirical Platt Calibration Quality (Table III of Manuscript)</h3>
+        </div>
+        <table class="apple-table">
+          <thead>
+            <tr>
+              <th>Evaluation Split</th>
+              <th>Query Type</th>
+              <th>Platt Slope ($a$)</th>
+              <th>Platt Intercept ($b$)</th>
+              <th>Expected Calib. Error (ECE)</th>
+              <th>Brier Score</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Core ($N=540$)</strong></td>
+              <td><span class="type-pill bridge">Bridge</span></td>
+              <td>0.2454</td>
+              <td>-1.3621</td>
+              <td><strong>0.057</strong></td>
+              <td>0.147</td>
+              <td><span class="status-tag success">Well Calibrated</span></td>
+            </tr>
+            <tr>
+              <td><strong>Core ($N=540$)</strong></td>
+              <td><span class="type-pill comp">Comparison</span></td>
+              <td>0.4724</td>
+              <td>-1.4665</td>
+              <td><strong>0.081</strong></td>
+              <td>0.134</td>
+              <td><span class="status-tag success">Well Calibrated</span></td>
+            </tr>
+            <tr>
+              <td><strong>Extension ($N=2,100$)</strong></td>
+              <td><span class="type-pill bridge">Bridge</span></td>
+              <td>0.2454 (Fixed)</td>
+              <td>-1.3621 (Fixed)</td>
+              <td><strong>0.053</strong></td>
+              <td>0.143</td>
+              <td><span class="status-tag success">Validated</span></td>
+            </tr>
+            <tr>
+              <td><strong>Extension ($N=2,100$)</strong></td>
+              <td><span class="type-pill comp">Comparison</span></td>
+              <td>0.4724 (Fixed)</td>
+              <td>-1.4665 (Fixed)</td>
+              <td><strong>0.086</strong></td>
+              <td>0.139</td>
+              <td><span class="status-tag success">Validated</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- Apple-style Footer -->
+  <footer class="app-footer">
+    <div class="footer-content">
+      <div class="footer-meta">
+        <span><strong>ECA-RAG Research Demonstration</strong></span>
+        <span>•</span>
+        <span>Department of Computer Science and Engineering, Kongu Engineering College</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/jaiyandhas/ecarag" target="_blank" class="footer-link">GitHub Repository</a>
+        <span>•</span>
+        <a href="../ECA-RAG_final.pdf" target="_blank" class="footer-link">Paper PDF (10 pages)</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
