@@ -128,11 +128,151 @@
         </div>
       </div>
 
+      <!-- Interactive Hop Pathway & Knowledge Bridge Graph -->
+      <div class="hop-pathway-card" id="hop-pathway-card">
+        <div class="pathway-header">
+          <div class="pathway-title-group">
+            <div class="pathway-eyebrow-row">
+              <span class="pathway-eyebrow">GRAPH REASONING ENGINE</span>
+              <button class="topology-toggle-btn" id="btn-toggle-topology" title="Toggle Topology Theory">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                <span>Why Hops Behave Differently</span>
+              </button>
+            </div>
+            <h3 class="pathway-heading">Multi-Hop Traversal & Bridge Pathway</h3>
+          </div>
+          <div class="pathway-legend">
+            <span class="legend-pill blue"><span class="legend-dot"></span>Question Subject</span>
+            <span class="legend-pill green"><span class="legend-dot"></span>Bridge Clue (Hop 1→2)</span>
+            <span class="legend-pill gold"><span class="legend-dot"></span>Target Answer</span>
+            <span class="legend-pill orange"><span class="legend-dot"></span>Calibrated Gate (θ*)</span>
+          </div>
+        </div>
+
+        <!-- The Animated Visual Chain-of-Reasoning Graph -->
+        <div class="pathway-canvas" id="pathway-canvas">
+          <!-- Node 0: Question -->
+          <div class="pathway-node active" id="node-query">
+            <div class="node-icon-wrapper">
+              <div class="node-icon">❓</div>
+              <div class="node-pulse-ring"></div>
+            </div>
+            <div class="node-details">
+              <span class="node-role-badge query">Hop 0: Query</span>
+              <span class="node-main-label" id="node-query-label">Adelaide Adrenaline</span>
+              <span class="node-sub-label">Anchor Entity In Question</span>
+            </div>
+          </div>
+
+          <!-- Beam 1 -->
+          <div class="pathway-beam active" id="beam-hop1">
+            <div class="beam-track">
+              <div class="beam-glow-pulse"></div>
+            </div>
+            <span class="beam-tag">Hop 1</span>
+          </div>
+
+          <!-- Node 1: Anchor Fact -->
+          <div class="pathway-node" id="node-hop1">
+            <div class="node-icon-wrapper">
+              <div class="node-icon">📄</div>
+              <div class="node-pulse-ring"></div>
+            </div>
+            <div class="node-details">
+              <span class="node-role-badge anchor">Hop 1: Anchor Fact</span>
+              <span class="node-main-label" id="node-hop1-label">Waiting for Hop 1...</span>
+              <span class="node-sub-label">Extracts Connecting Context</span>
+            </div>
+          </div>
+
+          <!-- Beam 2 (The Critical Bridge Entity) -->
+          <div class="pathway-beam bridge-beam" id="beam-hop2">
+            <div class="beam-track">
+              <div class="beam-glow-pulse"></div>
+            </div>
+            <div class="bridge-token-badge" id="bridge-token-badge">
+              <span class="bridge-bolt">⚡</span>
+              <span class="bridge-text" id="bridge-badge-text">Bridge Entity</span>
+            </div>
+          </div>
+
+          <!-- Node 2: Target Fact -->
+          <div class="pathway-node" id="node-hop2">
+            <div class="node-icon-wrapper">
+              <div class="node-icon">🎯</div>
+              <div class="node-pulse-ring"></div>
+            </div>
+            <div class="node-details">
+              <span class="node-role-badge target">Hop 2: Target Fact</span>
+              <span class="node-main-label" id="node-hop2-label">Waiting for Hop 2...</span>
+              <span class="node-sub-label">Unlocks Target Evidence</span>
+            </div>
+          </div>
+
+          <!-- Beam 3: Answer / Gate -->
+          <div class="pathway-beam" id="beam-halt">
+            <div class="beam-track">
+              <div class="beam-glow-pulse"></div>
+            </div>
+            <span class="beam-tag" id="beam-halt-label">θ* Gate</span>
+          </div>
+
+          <!-- Node 3: Halting / Sufficiency Node -->
+          <div class="pathway-node" id="node-halt">
+            <div class="node-icon-wrapper">
+              <div class="node-icon">🛡️</div>
+              <div class="node-pulse-ring"></div>
+            </div>
+            <div class="node-details">
+              <span class="node-role-badge halt">Adaptive Halting</span>
+              <span class="node-main-label" id="node-halt-label">Stopping Check</span>
+              <span class="node-sub-label">P(gold) &lt; θ* Prevents Drift</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Real-time Bridge Mechanism Explainer Strip -->
+        <div class="pathway-explainer-strip" id="pathway-explainer-strip">
+          <div class="explainer-icon-circle">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          </div>
+          <div class="explainer-content">
+            <span class="explainer-badge" id="explainer-badge">WHY THIS HOP HAPPENS</span>
+            <div class="explainer-text" id="pathway-explainer-text">
+              The question identifies <strong>Adelaide Adrenaline</strong>, but does not state the venue. Hop 1 retrieves the team chunk and uncovers the bridge entity <strong>Ice Arena</strong>. This reformulates cross-encoder attention for Hop 2 to retrieve the venue facility and answer.
+            </div>
+          </div>
+        </div>
+
+        <!-- Collapsible Topology Insights Panel -->
+        <div class="topology-insights-drawer hidden" id="topology-insights-drawer">
+          <div class="topology-grid">
+            <div class="topology-card bridge">
+              <div class="top-tag">Bridge Topology (Sequential Chain)</div>
+              <h4>Q → E₁ → E₂ → Answer</h4>
+              <p>
+                The second entity is <strong>missing from the original query</strong>. Hop 1 must uncover the bridge entity inside $d_1$. Appending $d_1$ into $q_1$ provides the essential lexical bridge (+1.7% gain in ECA-RAG).
+              </p>
+            </div>
+            <div class="topology-card comp">
+              <div class="top-tag">Comparison Topology (Parallel Fork)</div>
+              <h4>Q(E_A, E_B) → E_A &amp; E_B</h4>
+              <p>
+                Both entities already exist in $q_0$. Appending $d_A$ creates <strong>token dilution &amp; cross-attention crowding</strong> against entity $B$, causing query drift (-2.4% penalty in ECA-RAG).
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Hop Traversal Stage (Timeline & Cards) -->
       <div class="hops-traversal-container">
         <!-- Progress Stepper Track -->
         <div class="hops-stepper-bar">
-          <div class="stepper-title">Reasoning Sequence</div>
+          <div class="stepper-title-row">
+            <div class="stepper-title">Reasoning Sequence</div>
+            <span class="stepper-status-chip" id="stepper-status-chip">Hop 0 / 2 Initialized</span>
+          </div>
           <div class="stepper-nodes" id="stepper-nodes">
             <!-- Injected dynamically -->
           </div>

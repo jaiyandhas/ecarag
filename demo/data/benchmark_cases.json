@@ -180,6 +180,30 @@
           "recall": 1.0,
           "full_match": 1
         }
+      },
+      "anchor_entity": "Adelaide Adrenaline",
+      "bridge_entity": "Ice Arena",
+      "target_entity": "Ice Arena (Adelaide)",
+      "answer_span": "indoor ski slope",
+      "bridge_clue": "Identifies team home arena as \"Ice Arena\", unlocking venue query for Hop 2",
+      "query_diff": {
+        "added": "The team plays its home games at the Ice Arena, located in the suburb of Thebarton.",
+        "attention_shift": "Shifts cross-encoder attention from team name to home venue \"Ice Arena\""
+      },
+      "highlights": {
+        "anchor": [
+          "Adelaide Adrenaline",
+          "Australian Ice Hockey League"
+        ],
+        "bridge": [
+          "Ice Arena",
+          "Thebarton",
+          "IceArenA"
+        ],
+        "answer": [
+          "indoor ski slope",
+          "Mt Thebarton Snow and Ice"
+        ]
       }
     },
     {
@@ -362,6 +386,29 @@
           "recall": 1.0,
           "full_match": 1
         }
+      },
+      "anchor_entity": "Pont de Grenelle",
+      "bridge_entity": "Statue of Liberty",
+      "target_entity": "Replicas of the Statue of Liberty",
+      "answer_span": "Liberty Enlightening the World",
+      "bridge_clue": "Reveals that Pont de Grenelle passes behind a replica of the \"Statue of Liberty\"",
+      "query_diff": {
+        "added": "The bridge passes behind a replica of the Statue of Liberty.",
+        "attention_shift": "Shifts cross-encoder attention from Parisian bridge to \"Statue of Liberty\" replicas"
+      },
+      "highlights": {
+        "anchor": [
+          "Pont de Grenelle",
+          "Paris",
+          "Seine river"
+        ],
+        "bridge": [
+          "Statue of Liberty",
+          "replica of the Statue of Liberty"
+        ],
+        "answer": [
+          "Liberty Enlightening the World"
+        ]
       }
     },
     {
@@ -544,6 +591,29 @@
           "recall": 1.0,
           "full_match": 1
         }
+      },
+      "anchor_entity": "Larry Porter",
+      "bridge_entity": "Les Miles",
+      "target_entity": "Les Miles",
+      "answer_span": "Les Miles",
+      "bridge_clue": "Discovers that Porter served as assistant head coach at LSU under \"Les Miles\"",
+      "query_diff": {
+        "added": "...assistant head coach at Louisiana State University under Les Miles...",
+        "attention_shift": "Cross-attention locks onto head coach \"Les Miles\""
+      },
+      "highlights": {
+        "anchor": [
+          "Larry Porter",
+          "Louisiana State University"
+        ],
+        "bridge": [
+          "Les Miles",
+          "LSU"
+        ],
+        "answer": [
+          "Les Miles",
+          "head coach at Louisiana State University"
+        ]
       }
     },
     {
@@ -726,6 +796,26 @@
           "recall": 0.5,
           "full_match": 0
         }
+      },
+      "anchor_entity": "Royal Flash (film)",
+      "bridge_entity": "Otto von Bismarck",
+      "target_entity": "Otto von Bismarck",
+      "answer_span": "Prussian",
+      "bridge_clue": "Discovers link between Royal Flash (film) and Otto von Bismarck",
+      "query_diff": {
+        "added": "Context from Royal Flash (film) appended to query",
+        "attention_shift": "Attends to bridge entity Otto von Bismarck"
+      },
+      "highlights": {
+        "anchor": [
+          "Royal Flash (film)"
+        ],
+        "bridge": [
+          "Otto von Bismarck"
+        ],
+        "answer": [
+          "Prussian"
+        ]
       }
     },
     {
@@ -908,6 +998,26 @@
           "recall": 0.5,
           "full_match": 0
         }
+      },
+      "anchor_entity": "College Humor (film)",
+      "bridge_entity": "Bing Crosby",
+      "target_entity": "Bing Crosby",
+      "answer_span": "Harry Lillis \"Bing\" Crosby Jr.",
+      "bridge_clue": "Discovers link between College Humor (film) and Bing Crosby",
+      "query_diff": {
+        "added": "Context from College Humor (film) appended to query",
+        "attention_shift": "Attends to bridge entity Bing Crosby"
+      },
+      "highlights": {
+        "anchor": [
+          "College Humor (film)"
+        ],
+        "bridge": [
+          "Bing Crosby"
+        ],
+        "answer": [
+          "Harry Lillis \"Bing\" Crosby Jr."
+        ]
       }
     },
     {
@@ -1090,6 +1200,26 @@
           "recall": 0.0,
           "full_match": 0
         }
+      },
+      "anchor_entity": "Allan McNish",
+      "bridge_entity": "Toyota TF101",
+      "target_entity": "Toyota TF101",
+      "answer_span": "Mika Salo",
+      "bridge_clue": "Discovers link between Allan McNish and Toyota TF101",
+      "query_diff": {
+        "added": "Context from Allan McNish appended to query",
+        "attention_shift": "Attends to bridge entity Toyota TF101"
+      },
+      "highlights": {
+        "anchor": [
+          "Allan McNish"
+        ],
+        "bridge": [
+          "Toyota TF101"
+        ],
+        "answer": [
+          "Mika Salo"
+        ]
       }
     },
     {
@@ -1272,6 +1402,26 @@
           "recall": 0.5,
           "full_match": 0
         }
+      },
+      "anchor_entity": "Pennies from Heaven (TV series)",
+      "bridge_entity": "Rosemary Martin",
+      "target_entity": "Rosemary Martin",
+      "answer_span": "Dennis Potter.",
+      "bridge_clue": "Discovers link between Pennies from Heaven (TV series) and Rosemary Martin",
+      "query_diff": {
+        "added": "Context from Pennies from Heaven (TV series) appended to query",
+        "attention_shift": "Attends to bridge entity Rosemary Martin"
+      },
+      "highlights": {
+        "anchor": [
+          "Pennies from Heaven (TV series)"
+        ],
+        "bridge": [
+          "Rosemary Martin"
+        ],
+        "answer": [
+          "Dennis Potter."
+        ]
       }
     },
     {
@@ -1454,6 +1604,26 @@
           "recall": 0.5,
           "full_match": 0
         }
+      },
+      "anchor_entity": "Atat\u00fcrk Museum Mansion",
+      "bridge_entity": "Mustafa Kemal Atat\u00fcrk",
+      "target_entity": "Mustafa Kemal Atat\u00fcrk",
+      "answer_span": "museum",
+      "bridge_clue": "Discovers link between Atat\u00fcrk Museum Mansion and Mustafa Kemal Atat\u00fcrk",
+      "query_diff": {
+        "added": "Context from Atat\u00fcrk Museum Mansion appended to query",
+        "attention_shift": "Attends to bridge entity Mustafa Kemal Atat\u00fcrk"
+      },
+      "highlights": {
+        "anchor": [
+          "Atat\u00fcrk Museum Mansion"
+        ],
+        "bridge": [
+          "Mustafa Kemal Atat\u00fcrk"
+        ],
+        "answer": [
+          "museum"
+        ]
       }
     },
     {
@@ -1636,6 +1806,26 @@
           "recall": 1.0,
           "full_match": 1
         }
+      },
+      "anchor_entity": "Crazy Love (2007 film)",
+      "bridge_entity": "Parallel Comparison",
+      "target_entity": "Welcome to Nollywood",
+      "answer_span": "no",
+      "bridge_clue": "Evaluates parallel entities from the question against each other",
+      "query_diff": {
+        "added": "Context from Entity A appended to query",
+        "attention_shift": "Token crowding dilutes cross-attention on Entity B"
+      },
+      "highlights": {
+        "anchor": [
+          "Crazy Love (2007 film)"
+        ],
+        "bridge": [
+          "Welcome to Nollywood"
+        ],
+        "answer": [
+          "no"
+        ]
       }
     },
     {
@@ -1818,6 +2008,26 @@
           "recall": 1.0,
           "full_match": 1
         }
+      },
+      "anchor_entity": "Gasherbrum II",
+      "bridge_entity": "Parallel Comparison",
+      "target_entity": "Langtang Ri",
+      "answer_span": "Gasherbrum II",
+      "bridge_clue": "Evaluates parallel entities from the question against each other",
+      "query_diff": {
+        "added": "Context from Entity A appended to query",
+        "attention_shift": "Token crowding dilutes cross-attention on Entity B"
+      },
+      "highlights": {
+        "anchor": [
+          "Gasherbrum II"
+        ],
+        "bridge": [
+          "Langtang Ri"
+        ],
+        "answer": [
+          "Gasherbrum II"
+        ]
       }
     },
     {
@@ -2000,6 +2210,26 @@
           "recall": 1.0,
           "full_match": 1
         }
+      },
+      "anchor_entity": "Agatha Christie",
+      "bridge_entity": "Parallel Comparison",
+      "target_entity": "Clement Greenberg",
+      "answer_span": "Clement Greenberg",
+      "bridge_clue": "Evaluates parallel entities from the question against each other",
+      "query_diff": {
+        "added": "Context from Entity A appended to query",
+        "attention_shift": "Token crowding dilutes cross-attention on Entity B"
+      },
+      "highlights": {
+        "anchor": [
+          "Agatha Christie"
+        ],
+        "bridge": [
+          "Clement Greenberg"
+        ],
+        "answer": [
+          "Clement Greenberg"
+        ]
       }
     },
     {
@@ -2182,6 +2412,26 @@
           "recall": 1.0,
           "full_match": 1
         }
+      },
+      "anchor_entity": "Mikael Stanne",
+      "bridge_entity": "Parallel Comparison",
+      "target_entity": "Chester Bennington",
+      "answer_span": "Bengt Mikael Stanne",
+      "bridge_clue": "Evaluates parallel entities from the question against each other",
+      "query_diff": {
+        "added": "Context from Entity A appended to query",
+        "attention_shift": "Token crowding dilutes cross-attention on Entity B"
+      },
+      "highlights": {
+        "anchor": [
+          "Mikael Stanne"
+        ],
+        "bridge": [
+          "Chester Bennington"
+        ],
+        "answer": [
+          "Bengt Mikael Stanne"
+        ]
       }
     },
     {
@@ -2364,6 +2614,26 @@
           "recall": 1.0,
           "full_match": 1
         }
+      },
+      "anchor_entity": "Valens Aqueduct",
+      "bridge_entity": "Parallel Comparison",
+      "target_entity": "Atik Valide Mosque",
+      "answer_span": "Turkey",
+      "bridge_clue": "Evaluates parallel entities from the question against each other",
+      "query_diff": {
+        "added": "Context from Entity A appended to query",
+        "attention_shift": "Token crowding dilutes cross-attention on Entity B"
+      },
+      "highlights": {
+        "anchor": [
+          "Valens Aqueduct"
+        ],
+        "bridge": [
+          "Atik Valide Mosque"
+        ],
+        "answer": [
+          "Turkey"
+        ]
       }
     },
     {
@@ -2546,6 +2816,26 @@
           "recall": 1.0,
           "full_match": 1
         }
+      },
+      "anchor_entity": "M. P. Shiel",
+      "bridge_entity": "Parallel Comparison",
+      "target_entity": "Helen Dunmore",
+      "answer_span": "no",
+      "bridge_clue": "Evaluates parallel entities from the question against each other",
+      "query_diff": {
+        "added": "Context from Entity A appended to query",
+        "attention_shift": "Token crowding dilutes cross-attention on Entity B"
+      },
+      "highlights": {
+        "anchor": [
+          "M. P. Shiel"
+        ],
+        "bridge": [
+          "Helen Dunmore"
+        ],
+        "answer": [
+          "no"
+        ]
       }
     },
     {
@@ -2728,6 +3018,26 @@
           "recall": 1.0,
           "full_match": 1
         }
+      },
+      "anchor_entity": "LaLee's Kin: The Legacy of Cotton",
+      "bridge_entity": "Parallel Comparison",
+      "target_entity": "Gimme Shelter (1970 film)",
+      "answer_span": "LaLee's Kin: The Legacy of Cotton",
+      "bridge_clue": "Evaluates parallel entities from the question against each other",
+      "query_diff": {
+        "added": "Context from Entity A appended to query",
+        "attention_shift": "Token crowding dilutes cross-attention on Entity B"
+      },
+      "highlights": {
+        "anchor": [
+          "LaLee's Kin: The Legacy of Cotton"
+        ],
+        "bridge": [
+          "Gimme Shelter (1970 film)"
+        ],
+        "answer": [
+          "LaLee's Kin: The Legacy of Cotton"
+        ]
       }
     },
     {
@@ -2910,6 +3220,26 @@
           "recall": 1.0,
           "full_match": 1
         }
+      },
+      "anchor_entity": "Jiutai District",
+      "bridge_entity": "Parallel Comparison",
+      "target_entity": "Sanming",
+      "answer_span": "China",
+      "bridge_clue": "Evaluates parallel entities from the question against each other",
+      "query_diff": {
+        "added": "Context from Entity A appended to query",
+        "attention_shift": "Token crowding dilutes cross-attention on Entity B"
+      },
+      "highlights": {
+        "anchor": [
+          "Jiutai District"
+        ],
+        "bridge": [
+          "Sanming"
+        ],
+        "answer": [
+          "China"
+        ]
       }
     },
     {
@@ -3092,6 +3422,26 @@
           "recall": 0.5,
           "full_match": 0
         }
+      },
+      "anchor_entity": "Pacific Mozart Ensemble",
+      "bridge_entity": "Kurt Weill",
+      "target_entity": "Kurt Weill",
+      "answer_span": "Kurt Julian Weill",
+      "bridge_clue": "Discovers link between Pacific Mozart Ensemble and Kurt Weill",
+      "query_diff": {
+        "added": "Context from Pacific Mozart Ensemble appended to query",
+        "attention_shift": "Attends to bridge entity Kurt Weill"
+      },
+      "highlights": {
+        "anchor": [
+          "Pacific Mozart Ensemble"
+        ],
+        "bridge": [
+          "Kurt Weill"
+        ],
+        "answer": [
+          "Kurt Julian Weill"
+        ]
       }
     },
     {
@@ -3274,6 +3624,26 @@
           "recall": 1.0,
           "full_match": 1
         }
+      },
+      "anchor_entity": "Oldham County, Kentucky",
+      "bridge_entity": "Lake Louisvilla, Louisville",
+      "target_entity": "Lake Louisvilla, Louisville",
+      "answer_span": "Oldham County",
+      "bridge_clue": "Discovers link between Oldham County, Kentucky and Lake Louisvilla, Louisville",
+      "query_diff": {
+        "added": "Context from Oldham County, Kentucky appended to query",
+        "attention_shift": "Attends to bridge entity Lake Louisvilla, Louisville"
+      },
+      "highlights": {
+        "anchor": [
+          "Oldham County, Kentucky"
+        ],
+        "bridge": [
+          "Lake Louisvilla, Louisville"
+        ],
+        "answer": [
+          "Oldham County"
+        ]
       }
     },
     {
@@ -3456,6 +3826,26 @@
           "recall": 1.0,
           "full_match": 1
         }
+      },
+      "anchor_entity": "City of Salisbury",
+      "bridge_entity": "Para Hills West, South Australia",
+      "target_entity": "Para Hills West, South Australia",
+      "answer_span": "138,535",
+      "bridge_clue": "Discovers link between City of Salisbury and Para Hills West, South Australia",
+      "query_diff": {
+        "added": "Context from City of Salisbury appended to query",
+        "attention_shift": "Attends to bridge entity Para Hills West, South Australia"
+      },
+      "highlights": {
+        "anchor": [
+          "City of Salisbury"
+        ],
+        "bridge": [
+          "Para Hills West, South Australia"
+        ],
+        "answer": [
+          "138,535"
+        ]
       }
     },
     {
@@ -3638,6 +4028,26 @@
           "recall": 0.5,
           "full_match": 0
         }
+      },
+      "anchor_entity": "Twisted Fortune",
+      "bridge_entity": "Charlie Murphy",
+      "target_entity": "Charlie Murphy",
+      "answer_span": "Charlie Murphy",
+      "bridge_clue": "Discovers link between Twisted Fortune and Charlie Murphy",
+      "query_diff": {
+        "added": "Context from Twisted Fortune appended to query",
+        "attention_shift": "Attends to bridge entity Charlie Murphy"
+      },
+      "highlights": {
+        "anchor": [
+          "Twisted Fortune"
+        ],
+        "bridge": [
+          "Charlie Murphy"
+        ],
+        "answer": [
+          "Charlie Murphy"
+        ]
       }
     },
     {
@@ -3820,6 +4230,26 @@
           "recall": 1.0,
           "full_match": 1
         }
+      },
+      "anchor_entity": "Frodingham, Lincolnshire",
+      "bridge_entity": "Bill Dudman",
+      "target_entity": "Bill Dudman",
+      "answer_span": "Dudman",
+      "bridge_clue": "Discovers link between Frodingham, Lincolnshire and Bill Dudman",
+      "query_diff": {
+        "added": "Context from Frodingham, Lincolnshire appended to query",
+        "attention_shift": "Attends to bridge entity Bill Dudman"
+      },
+      "highlights": {
+        "anchor": [
+          "Frodingham, Lincolnshire"
+        ],
+        "bridge": [
+          "Bill Dudman"
+        ],
+        "answer": [
+          "Dudman"
+        ]
       }
     },
     {
@@ -4002,6 +4432,26 @@
           "recall": 1.0,
           "full_match": 1
         }
+      },
+      "anchor_entity": "Twelfth United States Army Group",
+      "bridge_entity": "Omar Bradley",
+      "target_entity": "Omar Bradley",
+      "answer_span": "Joint Chiefs of Staff",
+      "bridge_clue": "Discovers link between Twelfth United States Army Group and Omar Bradley",
+      "query_diff": {
+        "added": "Context from Twelfth United States Army Group appended to query",
+        "attention_shift": "Attends to bridge entity Omar Bradley"
+      },
+      "highlights": {
+        "anchor": [
+          "Twelfth United States Army Group"
+        ],
+        "bridge": [
+          "Omar Bradley"
+        ],
+        "answer": [
+          "Joint Chiefs of Staff"
+        ]
       }
     },
     {
@@ -4184,6 +4634,26 @@
           "recall": 1.0,
           "full_match": 1
         }
+      },
+      "anchor_entity": "Robert Holding",
+      "bridge_entity": "Sinclair Oil Corporation",
+      "target_entity": "Sinclair Oil Corporation",
+      "answer_span": "Harry F. Sinclair",
+      "bridge_clue": "Discovers link between Robert Holding and Sinclair Oil Corporation",
+      "query_diff": {
+        "added": "Context from Robert Holding appended to query",
+        "attention_shift": "Attends to bridge entity Sinclair Oil Corporation"
+      },
+      "highlights": {
+        "anchor": [
+          "Robert Holding"
+        ],
+        "bridge": [
+          "Sinclair Oil Corporation"
+        ],
+        "answer": [
+          "Harry F. Sinclair"
+        ]
       }
     },
     {
@@ -4366,6 +4836,26 @@
           "recall": 1.0,
           "full_match": 1
         }
+      },
+      "anchor_entity": "On the Radio (Regina Spektor song)",
+      "bridge_entity": "November Rain",
+      "target_entity": "November Rain",
+      "answer_span": "Axl Rose",
+      "bridge_clue": "Discovers link between On the Radio (Regina Spektor song) and November Rain",
+      "query_diff": {
+        "added": "Context from On the Radio (Regina Spektor song) appended to query",
+        "attention_shift": "Attends to bridge entity November Rain"
+      },
+      "highlights": {
+        "anchor": [
+          "On the Radio (Regina Spektor song)"
+        ],
+        "bridge": [
+          "November Rain"
+        ],
+        "answer": [
+          "Axl Rose"
+        ]
       }
     }
   ],

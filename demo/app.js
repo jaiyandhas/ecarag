@@ -171,10 +171,11 @@ function selectCase(c) {
   sliderThetaVal.textContent = calib.theta.toFixed(2);
   state.thetaOverride = calib.theta;
 
-  // Reset Stepper & Canvas
+  // Reset Stepper, Pathway Canvas & Canvas
   resetSimulation();
   renderCandidatePool();
   renderArmComparator();
+  updatePathwayGraph(0);
 }
 
 // Reset Hop Simulation
@@ -186,8 +187,92 @@ function resetSimulation() {
   retrievalOutcomeBox.innerHTML = '';
   renderStepperNodes();
   updateTelemetry(null);
+  updatePathwayGraph(0);
   btnStepPrev.disabled = true;
   btnStepNext.disabled = false;
+  const chip = document.getElementById('stepper-status-chip');
+  if (chip && state.activeCase) {
+    chip.textContent = `Hop 0 / ${state.activeCase.hops.length} Initialized`;
+  }
+}
+
+// Update Pathway Visualizer Canvas
+function updatePathwayGraph(stepIndex) {
+  if (!state.activeCase) return;
+  const c = state.activeCase;
+
+  const nodeQuery = document.getElementById('node-query');
+  const nodeHop1 = document.getElementById('node-hop1');
+  const nodeHop2 = document.getElementById('node-hop2');
+  const nodeHalt = document.getElementById('node-halt');
+
+  const beamHop1 = document.getElementById('beam-hop1');
+  const beamHop2 = document.getElementById('beam-hop2');
+  const beamHalt = document.getElementById('beam-halt');
+
+  const nodeQueryLabel = document.getElementById('node-query-label');
+  const nodeHop1Label = document.getElementById('node-hop1-label');
+  const nodeHop2Label = document.getElementById('node-hop2-label');
+  const nodeHaltLabel = document.getElementById('node-halt-label');
+  const bridgeBadgeText = document.getElementById('bridge-badge-text');
+  const pathwayExplainerText = document.getElementById('pathway-explainer-text');
+  const explainerBadge = document.getElementById('explainer-badge');
+
+  if (nodeQueryLabel) nodeQueryLabel.textContent = c.anchor_entity || (c.type === 'comparison' ? 'Parallel Query' : 'Question Subject');
+  if (bridgeBadgeText) bridgeBadgeText.textContent = `⚡ Bridge: ${c.bridge_entity || 'Extracted'}`;
+
+  // Reset states
+  [nodeQuery, nodeHop1, nodeHop2, nodeHalt].forEach(n => {
+    if (n) n.className = 'pathway-node';
+  });
+  [beamHop1, beamHop2, beamHalt].forEach(b => {
+    if (b) b.classList.remove('active');
+  });
+
+  if (stepIndex === 0) {
+    if (nodeQuery) nodeQuery.classList.add('active');
+    if (beamHop1) beamHop1.classList.add('active');
+    if (nodeHop1Label) nodeHop1Label.textContent = 'Waiting for Hop 1...';
+    if (nodeHop2Label) nodeHop2Label.textContent = 'Waiting for Hop 2...';
+    if (nodeHaltLabel) nodeHaltLabel.textContent = 'θ* Gate Active';
+    if (explainerBadge) explainerBadge.textContent = 'HOP 0: REASONING INITIALIZATION';
+    if (pathwayExplainerText) {
+      pathwayExplainerText.innerHTML = `Question identifies <strong>${c.anchor_entity || 'the subject'}</strong>. Because this is a ${c.type} problem, the model must execute a retrieval hop to extract the connecting context.`;
+    }
+  } else if (stepIndex === 1) {
+    if (nodeQuery) nodeQuery.classList.add('completed');
+    if (nodeHop1) nodeHop1.classList.add('active', 'completed');
+    if (beamHop1) beamHop1.classList.add('active');
+    if (beamHop2) beamHop2.classList.add('active');
+    if (nodeHop1Label) nodeHop1Label.textContent = c.hops[0]?.title || 'Anchor Document';
+    if (nodeHop2Label) nodeHop2Label.textContent = 'Next: Bridge Traversal';
+    if (nodeHaltLabel) nodeHaltLabel.textContent = 'θ* Gate Active';
+    if (explainerBadge) explainerBadge.textContent = 'HOP 1 COMPLETE: BRIDGE EXTRACTED';
+    if (pathwayExplainerText) {
+      pathwayExplainerText.innerHTML = `Hop 1 retrieved <strong>${c.hops[0]?.title}</strong>. Extracted bridge clue: <strong style="color: #1A7F37;">${c.bridge_entity || 'Bridge Link'}</strong> (${c.bridge_clue || 'connecting clue'}). Query is now reformulated for Hop 2.`;
+    }
+  } else if (stepIndex >= 2) {
+    if (nodeQuery) nodeQuery.classList.add('completed');
+    if (nodeHop1) nodeHop1.classList.add('completed');
+    if (nodeHop2) nodeHop2.classList.add('active', 'completed');
+    if (beamHop1) beamHop1.classList.add('active');
+    if (beamHop2) beamHop2.classList.add('active');
+    if (beamHalt) beamHalt.classList.add('active');
+    if (nodeHop1Label) nodeHop1Label.textContent = c.hops[0]?.title || 'Anchor Document';
+    if (nodeHop2Label) nodeHop2Label.textContent = c.hops[1]?.title || 'Target Document';
+    
+    if (stepIndex >= c.hops.length || c.hops[stepIndex - 1]?.will_halt_arm5) {
+      if (nodeHalt) nodeHalt.classList.add('completed', 'active');
+      if (nodeHaltLabel) nodeHaltLabel.textContent = `Halted at Hop ${stepIndex} (θ* passed)`;
+    } else {
+      if (nodeHaltLabel) nodeHaltLabel.textContent = 'Continuing Iteration...';
+    }
+
+    if (explainerBadge) explainerBadge.textContent = 'HOP 2 COMPLETE: EVIDENCE ASSEMBLED';
+    if (pathwayExplainerText) {
+      pathwayExplainerText.innerHTML = `Hop 2 traversed bridge into <strong>${c.hops[1]?.title}</strong>. Resolved ground truth answer: <strong style="color: #B25E00;">${c.answer_span || c.answer}</strong>. Calibrated gating threshold shields prompt from subsequent distractors.`;
+    }
+  }
 }
 
 // Render Stepper Nodes Track
@@ -218,7 +303,11 @@ function stepForward() {
     renderHopCard(hops[state.currentHopIndex], state.currentHopIndex);
     state.currentHopIndex++;
     renderStepperNodes();
+    updatePathwayGraph(state.currentHopIndex);
     btnStepPrev.disabled = false;
+
+    const chip = document.getElementById('stepper-status-chip');
+    if (chip) chip.textContent = `Hop ${state.currentHopIndex} / ${hops.length} Active`;
 
     // Check halting condition
     const currentHop = hops[state.currentHopIndex - 1];
@@ -242,7 +331,12 @@ function stepBackward() {
     renderHopCard(hops[i], i);
   }
   renderStepperNodes();
+  updatePathwayGraph(state.currentHopIndex);
   btnStepNext.disabled = false;
+
+  const chip = document.getElementById('stepper-status-chip');
+  if (chip) chip.textContent = `Hop ${state.currentHopIndex} / ${hops.length} Active`;
+
   if (state.currentHopIndex === 0) {
     btnStepPrev.disabled = true;
     updateTelemetry(null);
@@ -257,8 +351,48 @@ function runHopSequence() {
   stepForward();
 }
 
+// Helper to highlight entities in passage text
+function highlightPassageText(text, c) {
+  if (!c || !text) return text;
+  let highlighted = text;
+
+  // Answer spans
+  if (c.highlights?.answer) {
+    c.highlights.answer.forEach(kw => {
+      if (kw && kw.length > 2) {
+        const regex = new RegExp(`(${kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+        highlighted = highlighted.replace(regex, '<mark class="hl-answer" title="Target Answer Span">$1</mark>');
+      }
+    });
+  }
+
+  // Bridge entities
+  if (c.highlights?.bridge) {
+    c.highlights.bridge.forEach(kw => {
+      if (kw && kw.length > 2) {
+        const regex = new RegExp(`(${kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+        highlighted = highlighted.replace(regex, '<mark class="hl-bridge" title="Bridge Entity">$1</mark>');
+      }
+    });
+  }
+
+  // Anchor entities
+  if (c.highlights?.anchor) {
+    c.highlights.anchor.forEach(kw => {
+      if (kw && kw.length > 2) {
+        const regex = new RegExp(`(${kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+        highlighted = highlighted.replace(regex, '<mark class="hl-anchor" title="Anchor Entity">$1</mark>');
+      }
+    });
+  }
+
+  return highlighted;
+}
+
 // Render an Individual Hop Card
 function renderHopCard(h, index) {
+  const c = state.activeCase;
+  
   // If hop > 0, inject query augmentation bubble first
   if (index > 0) {
     const bubble = document.createElement('div');
@@ -272,7 +406,75 @@ function renderHopCard(h, index) {
 
   const card = document.createElement('div');
   card.className = `hop-card ${h.is_gold ? 'gold-found' : ''}`;
+
+  // Role Banner
+  let roleBannerHtml = '';
+  if (index === 0) {
+    roleBannerHtml = `
+      <div class="hop-role-banner anchor">
+        <span>🔍 <strong>Phase 1: Anchor Discovery</strong> — Initial retrieval maps question subject</span>
+        <span>Hop 1 of ${c.hops.length}</span>
+      </div>
+    `;
+  } else if (index === 1) {
+    roleBannerHtml = `
+      <div class="hop-role-banner bridge">
+        <span>⚡ <strong>Phase 2: Bridge Traversal</strong> — Cross-attention focused via Hop 1 bridge context</span>
+        <span>Hop 2 of ${c.hops.length}</span>
+      </div>
+    `;
+  } else {
+    roleBannerHtml = `
+      <div class="hop-role-banner halt">
+        <span>🛡️ <strong>Phase 3: Sufficiency Evaluation</strong> — Gating candidate against distractor cutoff</span>
+        <span>Hop ${index + 1} of ${c.hops.length}</span>
+      </div>
+    `;
+  }
+
+  // Discovered Bridge / Answer Callout Box
+  let calloutHtml = '';
+  if (index === 0 && c.bridge_entity) {
+    calloutHtml = `
+      <div class="hop-bridge-callout">
+        <div class="callout-icon">🔗</div>
+        <div class="callout-body">
+          <strong>Discovered Bridge Clue:</strong> <span class="diff-highlight">${c.bridge_entity}</span>. 
+          ${c.bridge_clue || 'Reveals the connecting entity required to resolve the second hop.'}
+        </div>
+      </div>
+    `;
+  } else if (index === 1 && c.answer_span) {
+    calloutHtml = `
+      <div class="hop-bridge-callout" style="border-left-color: #F5A623;">
+        <div class="callout-icon">🏆</div>
+        <div class="callout-body">
+          <strong>Discovered Target Answer:</strong> <span class="diff-highlight" style="color: #B25E00;">${c.answer_span}</span>. 
+          Cross-attention on bridge context unlocked the supporting facility and answer span.
+        </div>
+      </div>
+    `;
+  }
+
+  // Query Reformulation Diff
+  let diffHtml = '';
+  if (index > 0) {
+    diffHtml = `
+      <div class="hop-diff-inspector">
+        <div class="diff-title">Query Reformulation Diff (q<sub>${index-1}</sub> → q<sub>${index}</sub>)</div>
+        <div class="diff-content">
+          <span style="color: #64748B;">[Base Query]:</span> ${c.question}<br>
+          <span style="color: #0284C7; font-weight: 600;">+ [Injected Context]:</span> ${c.query_diff?.added || h.query_used.substring(c.question.length, c.question.length + 110) + '...'}<br>
+          <span style="color: #10B981; font-weight: 600;">⚡ [Cross-Attention Focus]:</span> ${c.query_diff?.attention_shift || 'Shifted attention toward bridge entity tokens.'}
+        </div>
+      </div>
+    `;
+  }
+
+  const highlightedText = highlightPassageText(h.text, c);
+
   card.innerHTML = `
+    ${roleBannerHtml}
     <div class="hop-header">
       <div class="hop-title-left">
         <div class="hop-badge-num">${h.hop_num}</div>
@@ -282,7 +484,9 @@ function renderHopCard(h, index) {
         ${h.is_gold ? '✓ Gold Supporting Fact' : 'Candidate Traversed'}
       </span>
     </div>
-    <div class="hop-text-preview">${h.text}</div>
+    ${calloutHtml}
+    ${diffHtml}
+    <div class="hop-text-preview">${highlightedText}</div>
     <div class="hop-metrics-strip">
       <div class="metric-item">
         <span class="metric-label">Cross-Encoder Logit:</span>
@@ -657,6 +861,15 @@ function setupEventListeners() {
   btnStepPrev.addEventListener('click', stepBackward);
   btnStepNext.addEventListener('click', stepForward);
   btnAutoplay.addEventListener('click', toggleAutoplay);
+
+  // Topology Theory Drawer Toggle
+  const btnToggleTopology = document.getElementById('btn-toggle-topology');
+  const topologyDrawer = document.getElementById('topology-insights-drawer');
+  if (btnToggleTopology && topologyDrawer) {
+    btnToggleTopology.addEventListener('click', () => {
+      topologyDrawer.classList.toggle('hidden');
+    });
+  }
 }
 
 // Execute Search from Input
@@ -664,15 +877,37 @@ function executeSearch() {
   const q = queryInput.value.trim().toLowerCase();
   if (!q) return;
 
-  const found = state.cases.find(c => c.question.toLowerCase().includes(q) || q.includes(c.question.toLowerCase()));
+  // Search through existing cases
+  const found = state.cases.find(c => 
+    c.question.toLowerCase().includes(q) || 
+    q.includes(c.question.toLowerCase()) ||
+    c.anchor_entity?.toLowerCase().includes(q) ||
+    c.bridge_entity?.toLowerCase().includes(q)
+  );
+
   if (found) {
     selectCase(found);
   } else {
-    // If not an exact preset, adapt the closest matching case
-    const fallback = state.cases[0];
-    const customCase = JSON.parse(JSON.stringify(fallback));
+    // Dynamically synthesize a custom case from user query
+    const base = state.cases[0];
+    const customCase = JSON.parse(JSON.stringify(base));
     customCase.question = queryInput.value.trim();
     customCase.id = 'custom_' + Date.now().toString(36);
+    
+    // Heuristic entity detection from question
+    const words = customCase.question.split(/\s+/);
+    const potentialEntities = words.filter(w => /^[A-Z]/.test(w) && w.length > 3);
+    const anchor = potentialEntities.slice(0, 2).join(' ') || words.slice(1, 4).join(' ');
+    
+    customCase.anchor_entity = anchor || 'Extracted Query Entity';
+    customCase.bridge_entity = 'Connecting Entity Link';
+    customCase.bridge_clue = `Discovers the connecting document linking '${customCase.anchor_entity}' to target evidence`;
+    customCase.highlights = {
+      anchor: [anchor],
+      bridge: [customCase.hops[0]?.title, 'Ice Arena'],
+      answer: [customCase.answer]
+    };
+    
     selectCase(customCase);
   }
   runHopSequence();
