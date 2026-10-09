@@ -489,13 +489,6 @@ Experimental pipelines used Python 3.14, PyTorch 2.12.1, Hugging Face \texttt{tr
 \label{sec:conclusion}
 This study evaluated post-hoc confidence calibration, hop-conditioned query reformulation, and adaptive retrieval depth in multi-hop RAG. Although Platt scaling reduces cross-encoder calibration error by over 80\%, gating retrieval decisions on calibrated probabilities fails to outperform static fixed-$k$ baselines at matched depth $k=4.00$. Furthermore, confidence-based gating imposes a noticeable recall penalty relative to ungated multi-step iteration on bridge questions. In exploratory multi-depth analysis across $k \in [2.0, 5.5]$, iterative gating lags behind fixed-$k$ at constrained budgets before matching fixed-$k$ at intermediate depths; on bridge questions, a learned sufficiency stopper matches fixed-$k$ across all covered depths (all 95\% CIs include zero), but on comparison questions it is significantly worse than fixed-$k$ at every covered depth $k \in [2.0, 3.5]$ ($\Delta = -0.138$ to $-0.044$, all Holm $p < 0.001$); nonetheless, in exploratory evaluation it improves upon iterative gating (Arm 5) on both question types across $k \in [2.0, 3.5]$ by $+1.5$ to $+5.5$ points (all Holm $p < 0.001$). Sequential query expansion yields clear benefits for chained bridge questions while impairing parallel comparison queries. These findings show that adaptive retrieval depth cannot be resolved through passage-level score thresholding alone; future research in multi-hop RAG should focus on topology-guided query routing and set-level evidence sufficiency.
 
-% =========================================================================
-% ACKNOWLEDGMENT
-% =========================================================================
-\section*{Acknowledgment}
-This work was undertaken as part of a final-year undergraduate project.
-
-\vspace{1pt}
 \noindent\textbf{Data and Code Availability:} HotpotQA is an open benchmark dataset~\cite{yang2018hotpotqa}. Evaluation tables, scripts, and checkpoint configurations are accessible at \url{https://github.com/jaiyandhas/ecarag}.
 
 \vspace{1pt}
