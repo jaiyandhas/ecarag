@@ -1,0 +1,117 @@
+section,token,file,row,column,expected_raw,scale,status
+Abstract,0.225,TABLE_calibration_quality.csv,0,ECE,0.2248,1.0,MATCH
+Abstract,0.039,TABLE_calibration_quality.csv,2,ECE,0.0391,1.0,MATCH
+Abstract,0.213,TABLE_calibration_quality.csv,0,Brier,0.2127,1.0,MATCH
+Abstract,0.116,TABLE_calibration_quality.csv,2,Brier,0.1157,1.0,MATCH
+Abstract,2.7,TABLE_matched_depth_k4_bootstrap.csv,22,delta_recall_k4,-0.0266,-100.0,MATCH
+Abstract,-0.027,TABLE_matched_depth_k4_bootstrap.csv,22,delta_recall_k4,-0.0266,1.0,MATCH
+Abstract,-0.0088,TABLE_matched_depth_k4_bootstrap.csv,21,delta_recall_k4,-0.0088,1.0,MATCH
+Abstract,0.079,TABLE_matched_depth_k4_bootstrap.csv,21,p_value,0.0794,1.0,MATCH
+Abstract,2.6,TABLE_matched_depth_k4_bootstrap.csv,20,delta_recall_k4,-0.0257,-100.0,MATCH
+Abstract,-0.0257,TABLE_matched_depth_k4_bootstrap.csv,20,delta_recall_k4,-0.0257,1.0,MATCH
+Abstract,+1.7,TABLE_matched_depth_k4_bootstrap.csv,24,delta_recall_k4,0.0169,100.0,MATCH
+Abstract,+0.017,TABLE_matched_depth_k4_bootstrap.csv,24,delta_recall_k4,0.0169,1.0,MATCH
+Abstract,0.001,TABLE_matched_depth_k4_bootstrap.csv,24,p_holm,0.0008,1.0,MATCH
+Abstract,-2.4,TABLE_matched_depth_k4_bootstrap.csv,29,delta_recall_k4,-0.024,100.0,MATCH
+Abstract,-0.024,TABLE_matched_depth_k4_bootstrap.csv,29,delta_recall_k4,-0.024,1.0,MATCH
+Abstract,0.007,TABLE_matched_depth_k4_bootstrap.csv,29,p_holm,0.0072,1.0,MATCH
+Abstract,0.80,TABLE_sufficiency_auc.csv,1,auc,0.7964,1.0,MATCH
+Abstract,-0.138,TABLE_multi_depth_comparison.csv,16,obs_delta,-0.1376,1.0,MATCH
+Abstract,-0.044,TABLE_multi_depth_comparison.csv,19,obs_delta,-0.0441,1.0,MATCH
+Contributions,0.2248,TABLE_calibration_quality.csv,0,ECE,0.2248,1.0,MATCH
+Contributions,0.0391,TABLE_calibration_quality.csv,2,ECE,0.0391,1.0,MATCH
+Contributions,82.6%,TABLE_calibration_quality.csv,2,ECE_red,0.826,100.0,MATCH
+Contributions,0.2127,TABLE_calibration_quality.csv,0,Brier,0.2127,1.0,MATCH
+Contributions,0.1157,TABLE_calibration_quality.csv,2,Brier,0.1157,1.0,MATCH
+Contributions,0.7983,TABLE_matched_depth_k4_point_estimates.csv,4,Arm 5 (interp k=4),0.7983,1.0,MATCH
+Contributions,0.8072,TABLE_matched_depth_k4_point_estimates.csv,4,Fixed-k (k=4),0.8072,1.0,MATCH
+Contributions,-0.0088,TABLE_matched_depth_k4_bootstrap.csv,21,delta_recall_k4,-0.0088,1.0,MATCH
+Contributions,-0.0187,TABLE_matched_depth_k4_bootstrap.csv,21,ci_lo,-0.0187,1.0,MATCH
+Contributions,+0.0010,TABLE_matched_depth_k4_bootstrap.csv,21,ci_hi,0.001,1.0,MATCH
+Contributions,0.079,TABLE_matched_depth_k4_bootstrap.csv,21,p_value,0.0794,1.0,MATCH
+Contributions,0.7806,TABLE_matched_depth_k4_point_estimates.csv,4,Arm 4b (interp k=4),0.7806,1.0,MATCH
+Contributions,-0.0266,TABLE_matched_depth_k4_bootstrap.csv,22,delta_recall_k4,-0.0266,1.0,MATCH
+Contributions,-0.0341,TABLE_matched_depth_k4_bootstrap.csv,22,ci_lo,-0.0341,1.0,MATCH
+Contributions,-0.0191,TABLE_matched_depth_k4_bootstrap.csv,22,ci_hi,-0.0191,1.0,MATCH
+Contributions,2.6,TABLE_matched_depth_k4_bootstrap.csv,20,delta_recall_k4,-0.0257,-100.0,MATCH
+Contributions,-0.0257,TABLE_matched_depth_k4_bootstrap.csv,20,delta_recall_k4,-0.0257,1.0,MATCH
+Contributions,-0.0328,TABLE_matched_depth_k4_bootstrap.csv,20,ci_lo,-0.0328,1.0,MATCH
+Contributions,-0.0186,TABLE_matched_depth_k4_bootstrap.csv,20,ci_hi,-0.0186,1.0,MATCH
+Contributions,+1.7,TABLE_matched_depth_k4_bootstrap.csv,24,delta_recall_k4,0.0169,100.0,MATCH
+Contributions,+0.017,TABLE_matched_depth_k4_bootstrap.csv,24,delta_recall_k4,0.0169,1.0,MATCH
+Contributions,+0.0077,TABLE_matched_depth_k4_bootstrap.csv,24,ci_lo,0.0077,1.0,MATCH
+Contributions,+0.0258,TABLE_matched_depth_k4_bootstrap.csv,24,ci_hi,0.0258,1.0,MATCH
+Contributions,-2.4,TABLE_matched_depth_k4_bootstrap.csv,29,delta_recall_k4,-0.024,100.0,MATCH
+Contributions,-0.024,TABLE_matched_depth_k4_bootstrap.csv,29,delta_recall_k4,-0.024,1.0,MATCH
+Contributions,-0.0391,TABLE_matched_depth_k4_bootstrap.csv,29,ci_lo,-0.0391,1.0,MATCH
+Contributions,-0.0089,TABLE_matched_depth_k4_bootstrap.csv,29,ci_hi,-0.0089,1.0,MATCH
+Contributions,+0.0127,TABLE_multi_depth_bridge.csv,15,obs_delta,0.0127,1.0,MATCH
+Contributions,+0.0044,TABLE_multi_depth_bridge.csv,15,ci_lo,0.0044,1.0,MATCH
+Contributions,+0.0210,TABLE_multi_depth_bridge.csv,15,ci_hi,0.021,1.0,MATCH
+Contributions,0.0176,TABLE_multi_depth_bridge.csv,15,p_holm,0.0176,1.0,MATCH
+Contributions,0.7964,TABLE_sufficiency_auc.csv,1,auc,0.7964,1.0,MATCH
+Table 1,0.2248,TABLE_calibration_quality.csv,0,ECE,0.2248,1.0,MATCH
+Table 1,0.2127,TABLE_calibration_quality.csv,0,Brier,0.2127,1.0,MATCH
+Table 1,0.0419,TABLE_calibration_quality.csv,1,ECE,0.0419,1.0,MATCH
+Table 1,0.1161,TABLE_calibration_quality.csv,1,Brier,0.1161,1.0,MATCH
+Table 1,81.4%,TABLE_calibration_quality.csv,1,ECE_red,0.8136,100.0,MATCH
+Table 1,0.0391,TABLE_calibration_quality.csv,2,ECE,0.0391,1.0,MATCH
+Table 1,0.1157,TABLE_calibration_quality.csv,2,Brier,0.1157,1.0,MATCH
+Table 1,82.6%,TABLE_calibration_quality.csv,2,ECE_red,0.826,100.0,MATCH
+Table 2 (N=540 (Original Eval) bridge),0.8054,TABLE_matched_depth_k4_point_estimates.csv,0,Fixed-k (k=4),0.8054,1.0,MATCH
+Table 2 (N=540 (Original Eval) bridge),0.8160,TABLE_matched_depth_k4_point_estimates.csv,0,Iter k=4 (no gate),0.816,1.0,MATCH
+Table 2 (N=540 (Original Eval) bridge),0.8013,TABLE_matched_depth_k4_point_estimates.csv,0,Arm 5 (interp k=4),0.8013,1.0,MATCH
+Table 2 (N=540 (Original Eval) bridge),0.7693,TABLE_matched_depth_k4_point_estimates.csv,0,Arm 4b (interp k=4),0.7693,1.0,MATCH
+Table 2 (N=540 (Original Eval) comparison),0.9483,TABLE_matched_depth_k4_point_estimates.csv,1,Fixed-k (k=4),0.9483,1.0,MATCH
+Table 2 (N=540 (Original Eval) comparison),0.9181,TABLE_matched_depth_k4_point_estimates.csv,1,Iter k=4 (no gate),0.9181,1.0,MATCH
+Table 2 (N=540 (Original Eval) comparison),0.8649,TABLE_matched_depth_k4_point_estimates.csv,1,Arm 5 (interp k=4),0.8649,1.0,MATCH
+Table 2 (N=540 (Original Eval) comparison),0.9479,TABLE_matched_depth_k4_point_estimates.csv,1,Arm 4b (interp k=4),0.9479,1.0,MATCH
+Table 2 (N=540 (Original Eval) comparison),0.8712,TABLE_matched_depth_k4_point_estimates.csv,1,Arm 6 (interp k=4),0.8712,1.0,MATCH
+Table 2 (N=2100 (Extension) bridge),0.8076,TABLE_matched_depth_k4_point_estimates.csv,2,Fixed-k (k=4),0.8076,1.0,MATCH
+Table 2 (N=2100 (Extension) bridge),0.8261,TABLE_matched_depth_k4_point_estimates.csv,2,Iter k=4 (no gate),0.8261,1.0,MATCH
+Table 2 (N=2100 (Extension) bridge),0.7978,TABLE_matched_depth_k4_point_estimates.csv,2,Arm 5 (interp k=4),0.7978,1.0,MATCH
+Table 2 (N=2100 (Extension) bridge),0.7835,TABLE_matched_depth_k4_point_estimates.csv,2,Arm 4b (interp k=4),0.7835,1.0,MATCH
+Table 2 (N=2100 (Extension) comparison),0.9553,TABLE_matched_depth_k4_point_estimates.csv,3,Fixed-k (k=4),0.9553,1.0,MATCH
+Table 2 (N=2100 (Extension) comparison),0.9329,TABLE_matched_depth_k4_point_estimates.csv,3,Iter k=4 (no gate),0.9329,1.0,MATCH
+Table 2 (N=2100 (Extension) comparison),0.9273,TABLE_matched_depth_k4_point_estimates.csv,3,Arm 5 (interp k=4),0.9273,1.0,MATCH
+Table 2 (N=2100 (Extension) comparison),0.9530,TABLE_matched_depth_k4_point_estimates.csv,3,Arm 4b (interp k=4),0.953,1.0,MATCH
+Table 2 (N=2100 (Extension) comparison),0.9280,TABLE_matched_depth_k4_point_estimates.csv,3,Arm 6 (interp k=4),0.928,1.0,MATCH
+Table 2 (Pooled (N=2640) bridge),0.8072,TABLE_matched_depth_k4_point_estimates.csv,4,Fixed-k (k=4),0.8072,1.0,MATCH
+Table 2 (Pooled (N=2640) bridge),0.8240,TABLE_matched_depth_k4_point_estimates.csv,4,Iter k=4 (no gate),0.824,1.0,MATCH
+Table 2 (Pooled (N=2640) bridge),0.7983,TABLE_matched_depth_k4_point_estimates.csv,4,Arm 5 (interp k=4),0.7983,1.0,MATCH
+Table 2 (Pooled (N=2640) bridge),0.7806,TABLE_matched_depth_k4_point_estimates.csv,4,Arm 4b (interp k=4),0.7806,1.0,MATCH
+Table 2 (Pooled (N=2640) comparison),0.9538,TABLE_matched_depth_k4_point_estimates.csv,5,Fixed-k (k=4),0.9538,1.0,MATCH
+Table 2 (Pooled (N=2640) comparison),0.9298,TABLE_matched_depth_k4_point_estimates.csv,5,Iter k=4 (no gate),0.9298,1.0,MATCH
+Table 2 (Pooled (N=2640) comparison),0.9147,TABLE_matched_depth_k4_point_estimates.csv,5,Arm 5 (interp k=4),0.9147,1.0,MATCH
+Table 2 (Pooled (N=2640) comparison),0.9520,TABLE_matched_depth_k4_point_estimates.csv,5,Arm 4b (interp k=4),0.952,1.0,MATCH
+Table 2 (Pooled (N=2640) comparison),0.9168,TABLE_matched_depth_k4_point_estimates.csv,5,Arm 6 (interp k=4),0.9168,1.0,MATCH
+Table 4 (bridge Arm 5 (interp k=4) - Iter k=4 (no gate)),-0.0257,TABLE_matched_depth_k4_bootstrap.csv,20,delta_recall_k4,-0.0257,1.0,MATCH
+Table 4 (bridge Arm 5 (interp k=4) - Iter k=4 (no gate)),-0.0328,TABLE_matched_depth_k4_bootstrap.csv,20,ci_lo,-0.0328,1.0,MATCH
+Table 4 (bridge Arm 5 (interp k=4) - Iter k=4 (no gate)),-0.0186,TABLE_matched_depth_k4_bootstrap.csv,20,ci_hi,-0.0186,1.0,MATCH
+Table 4 (bridge Arm 5 (interp k=4) - Arm 2 (fixed k=4)),-0.0088,TABLE_matched_depth_k4_bootstrap.csv,21,delta_recall_k4,-0.0088,1.0,MATCH
+Table 4 (bridge Arm 5 (interp k=4) - Arm 2 (fixed k=4)),-0.0187,TABLE_matched_depth_k4_bootstrap.csv,21,ci_lo,-0.0187,1.0,MATCH
+Table 4 (bridge Arm 5 (interp k=4) - Arm 2 (fixed k=4)),+0.0010,TABLE_matched_depth_k4_bootstrap.csv,21,ci_hi,0.001,1.0,MATCH
+Table 4 (bridge Arm 4b (interp k=4) - Arm 2 (fixed k=4)),-0.0266,TABLE_matched_depth_k4_bootstrap.csv,22,delta_recall_k4,-0.0266,1.0,MATCH
+Table 4 (bridge Arm 4b (interp k=4) - Arm 2 (fixed k=4)),-0.0341,TABLE_matched_depth_k4_bootstrap.csv,22,ci_lo,-0.0341,1.0,MATCH
+Table 4 (bridge Arm 4b (interp k=4) - Arm 2 (fixed k=4)),-0.0191,TABLE_matched_depth_k4_bootstrap.csv,22,ci_hi,-0.0191,1.0,MATCH
+Table 4 (bridge Arm 5 (interp k=4) - Arm 4b (interp k=4)),+0.0177,TABLE_matched_depth_k4_bootstrap.csv,23,delta_recall_k4,0.0177,1.0,MATCH
+Table 4 (bridge Arm 5 (interp k=4) - Arm 4b (interp k=4)),+0.0084,TABLE_matched_depth_k4_bootstrap.csv,23,ci_lo,0.0084,1.0,MATCH
+Table 4 (bridge Arm 5 (interp k=4) - Arm 4b (interp k=4)),+0.0269,TABLE_matched_depth_k4_bootstrap.csv,23,ci_hi,0.0269,1.0,MATCH
+Table 4 (bridge Iter k=4 (no gate) - Arm 2 (fixed k=4)),+0.0169,TABLE_matched_depth_k4_bootstrap.csv,24,delta_recall_k4,0.0169,1.0,MATCH
+Table 4 (bridge Iter k=4 (no gate) - Arm 2 (fixed k=4)),+0.0077,TABLE_matched_depth_k4_bootstrap.csv,24,ci_lo,0.0077,1.0,MATCH
+Table 4 (bridge Iter k=4 (no gate) - Arm 2 (fixed k=4)),+0.0258,TABLE_matched_depth_k4_bootstrap.csv,24,ci_hi,0.0258,1.0,MATCH
+Table 4 (comparison Arm 5 (interp k=4) - Iter k=4 (no gate)),-0.0151,TABLE_matched_depth_k4_bootstrap.csv,25,delta_recall_k4,-0.0151,1.0,MATCH
+Table 4 (comparison Arm 5 (interp k=4) - Iter k=4 (no gate)),-0.0293,TABLE_matched_depth_k4_bootstrap.csv,25,ci_lo,-0.0293,1.0,MATCH
+Table 4 (comparison Arm 5 (interp k=4) - Iter k=4 (no gate)),-0.0010,TABLE_matched_depth_k4_bootstrap.csv,25,ci_hi,-0.001,1.0,MATCH
+Table 4 (comparison Arm 5 (interp k=4) - Arm 2 (fixed k=4)),-0.0391,TABLE_matched_depth_k4_bootstrap.csv,26,delta_recall_k4,-0.0391,1.0,MATCH
+Table 4 (comparison Arm 5 (interp k=4) - Arm 2 (fixed k=4)),-0.0565,TABLE_matched_depth_k4_bootstrap.csv,26,ci_lo,-0.0565,1.0,MATCH
+Table 4 (comparison Arm 5 (interp k=4) - Arm 2 (fixed k=4)),-0.0221,TABLE_matched_depth_k4_bootstrap.csv,26,ci_hi,-0.0221,1.0,MATCH
+Table 4 (comparison Arm 4b (interp k=4) - Arm 2 (fixed k=4)),-0.0018,TABLE_matched_depth_k4_bootstrap.csv,27,delta_recall_k4,-0.0018,1.0,MATCH
+Table 4 (comparison Arm 4b (interp k=4) - Arm 2 (fixed k=4)),-0.0136,TABLE_matched_depth_k4_bootstrap.csv,27,ci_lo,-0.0136,1.0,MATCH
+Table 4 (comparison Arm 4b (interp k=4) - Arm 2 (fixed k=4)),+0.0095,TABLE_matched_depth_k4_bootstrap.csv,27,ci_hi,0.0095,1.0,MATCH
+Table 4 (comparison Arm 5 (interp k=4) - Arm 4b (interp k=4)),-0.0373,TABLE_matched_depth_k4_bootstrap.csv,28,delta_recall_k4,-0.0373,1.0,MATCH
+Table 4 (comparison Arm 5 (interp k=4) - Arm 4b (interp k=4)),-0.0534,TABLE_matched_depth_k4_bootstrap.csv,28,ci_lo,-0.0534,1.0,MATCH
+Table 4 (comparison Arm 5 (interp k=4) - Arm 4b (interp k=4)),-0.0207,TABLE_matched_depth_k4_bootstrap.csv,28,ci_hi,-0.0207,1.0,MATCH
+Table 4 (comparison Iter k=4 (no gate) - Arm 2 (fixed k=4)),-0.0240,TABLE_matched_depth_k4_bootstrap.csv,29,delta_recall_k4,-0.024,1.0,MATCH
+Table 4 (comparison Iter k=4 (no gate) - Arm 2 (fixed k=4)),-0.0391,TABLE_matched_depth_k4_bootstrap.csv,29,ci_lo,-0.0391,1.0,MATCH
+Table 4 (comparison Iter k=4 (no gate) - Arm 2 (fixed k=4)),-0.0089,TABLE_matched_depth_k4_bootstrap.csv,29,ci_hi,-0.0089,1.0,MATCH

@@ -1,0 +1,77 @@
+{
+  "sample_sizes": [
+    3000,
+    360,
+    540,
+    2100,
+    2640,
+    2077,
+    563,
+    424,
+    116,
+    1653,
+    447,
+    279,
+    81,
+    7405
+  ],
+  "split_indices": [
+    0,
+    359,
+    899,
+    900,
+    2999
+  ],
+  "eval_parameters": {
+    "candidates_M": 10,
+    "hard_negatives": 8,
+    "gold_supporting_facts": 2,
+    "eval_chunk_predictions": 5385,
+    "bootstrap_resamples": 10000,
+    "random_seed": 42,
+    "cross_encoder_max_tokens": 512,
+    "bi_encoder_dim": 384,
+    "prefix_truncation_words": 50
+  },
+  "grid_depths": [
+    1.0,
+    2.0,
+    2.5,
+    3.0,
+    3.5,
+    4.0,
+    4.0,
+    4.5,
+    5.0,
+    5.5,
+    6.0
+  ],
+  "thresholds_and_alpha": [
+    0.05,
+    0.95,
+    95.0,
+    95,
+    0.18,
+    0.15,
+    -1.925,
+    3.87
+  ],
+  "table1_cited_rows": [
+    20,
+    21,
+    22,
+    23,
+    28,
+    29,
+    30,
+    31
+  ],
+  "conceptual_illustration_constants": [
+    0.3,
+    30,
+    40,
+    60,
+    40.0,
+    60.0
+  ]
+}

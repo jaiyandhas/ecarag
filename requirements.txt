@@ -1,8 +1,7 @@
-streamlit>=1.36
-sentence-transformers>=3.0
-torch>=2.2
-numpy>=1.26
-pypdf>=4.2
-anthropic>=0.34
-google-generativeai>=0.7
-
+datasets
+sentence-transformers
+scikit-learn
+scipy
+pandas
+numpy
+matplotlib

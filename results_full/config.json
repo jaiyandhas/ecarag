@@ -1,0 +1,20 @@
+{
+  "n_samples": 900,
+  "fixed_k": 4,
+  "candidate_pool_k": 10,
+  "min_k": 1,
+  "max_k": 6,
+  "cal_frac": 0.4,
+  "final_prob_threshold": 0.15,
+  "sweep_thresholds": [
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3,
+    0.4,
+    0.5
+  ],
+  "hop_augmentation_words": null,
+  "seed": 42
+}

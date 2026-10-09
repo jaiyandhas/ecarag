@@ -1,0 +1,31 @@
+split,type,n,comparison,description,delta_recall_k4,ci_lo,ci_hi,p_value,p_holm
+N=540 (Original Eval),bridge,424,Arm 5 (interp k=4) - Iter k=4 (no gate),Arm 5 vs Iter k=4 (gating effect at k=4),-0.014748643060222277,-0.030698712206287053,0.0008168007769144473,0.0624,0.18719999999999998
+N=540 (Original Eval),bridge,424,Arm 5 (interp k=4) - Arm 2 (fixed k=4),Arm 5 vs Arm 2 (iter-gated vs fixed-k at k=4),-0.00413543551305251,-0.02458948005302755,0.016098099137684296,0.6756,0.6756
+N=540 (Original Eval),bridge,424,Arm 4b (interp k=4) - Arm 2 (fixed k=4),Arm 4b vs Arm 2 (single-pass calib vs fixed-k at k=4),-0.03610304789550067,-0.05274460405946244,-0.020329484770256766,0.0001,0.0005
+N=540 (Original Eval),bridge,424,Arm 5 (interp k=4) - Arm 4b (interp k=4),Arm 5 vs Arm 4b (iterative vs single-pass gating at k=4),0.03196761238244816,0.011498475078551233,0.052488440631613516,0.001,0.004
+N=540 (Original Eval),bridge,424,Iter k=4 (no gate) - Arm 2 (fixed k=4),Iter k=4 vs Arm 2 (hop-conditioning alone at k=4),0.010613207547169767,-0.009433962264150941,0.030660377358490587,0.316,0.632
+N=540 (Original Eval),comparison,116,Arm 5 (interp k=4) - Iter k=4 (no gate),Arm 5 vs Iter k=4 (gating effect at k=4),-0.053160919540229945,-0.08836463464696223,-0.014367816091954033,0.0082,0.024600000000000004
+N=540 (Original Eval),comparison,116,Arm 5 (interp k=4) - Arm 2 (fixed k=4),Arm 5 vs Arm 2 (iter-gated vs fixed-k at k=4),-0.08333333333333337,-0.1233527193204869,-0.04166455375253549,0.0001,0.0005
+N=540 (Original Eval),comparison,116,Arm 4b (interp k=4) - Arm 2 (fixed k=4),Arm 4b vs Arm 2 (single-pass calib vs fixed-k at k=4),-0.00037481259370319986,-0.030564263322883978,0.028449933687002656,0.9998,0.9998
+N=540 (Original Eval),comparison,116,Arm 5 (interp k=4) - Arm 4b (interp k=4),Arm 5 vs Arm 4b (iterative vs single-pass gating at k=4),-0.08295852073963017,-0.11974375669011392,-0.0433573373087892,0.0002,0.0008
+N=540 (Original Eval),comparison,116,Iter k=4 (no gate) - Arm 2 (fixed k=4),Iter k=4 vs Arm 2 (hop-conditioning alone at k=4),-0.030172413793103425,-0.06896551724137934,0.004310344827586188,0.1226,0.2452
+N=2100 (Extension),bridge,1653,Arm 5 (interp k=4) - Iter k=4 (no gate),Arm 5 vs Iter k=4 (gating effect at k=4),-0.028320033168189984,-0.03630638867896087,-0.020355576055438314,0.0001,0.0005
+N=2100 (Extension),bridge,1653,Arm 5 (interp k=4) - Arm 2 (fixed k=4),Arm 5 vs Arm 2 (iter-gated vs fixed-k at k=4),-0.009868732502733235,-0.020873155646981865,0.0014123929122025673,0.0904,0.0904
+N=2100 (Extension),bridge,1653,Arm 4b (interp k=4) - Arm 2 (fixed k=4),Arm 4b vs Arm 2 (single-pass calib vs fixed-k at k=4),-0.02408855756214401,-0.032495150712029054,-0.015577657679044092,0.0001,0.0005
+N=2100 (Extension),bridge,1653,Arm 5 (interp k=4) - Arm 4b (interp k=4),Arm 5 vs Arm 4b (iterative vs single-pass gating at k=4),0.014219825059410773,0.0035551695211209103,0.02438897463677625,0.0092,0.0184
+N=2100 (Extension),bridge,1653,Iter k=4 (no gate) - Arm 2 (fixed k=4),Iter k=4 vs Arm 2 (hop-conditioning alone at k=4),0.01845130066545675,0.008166969147005432,0.02873563218390796,0.0008,0.0024000000000000002
+N=2100 (Extension),comparison,447,Arm 5 (interp k=4) - Iter k=4 (no gate),Arm 5 vs Iter k=4 (gating effect at k=4),-0.0056075591663722335,-0.020726573548409767,0.008989437084260801,0.4536,0.9072
+N=2100 (Extension),comparison,447,Arm 5 (interp k=4) - Arm 2 (fixed k=4),Arm 5 vs Arm 2 (iter-gated vs fixed-k at k=4),-0.027978923819616086,-0.04655703598656616,-0.009092025995911841,0.0046,0.023
+N=2100 (Extension),comparison,447,Arm 4b (interp k=4) - Arm 2 (fixed k=4),Arm 4b vs Arm 2 (single-pass calib vs fixed-k at k=4),-0.002301669247978033,-0.015050705828247088,0.010206029066300326,0.7302,0.9072
+N=2100 (Extension),comparison,447,Arm 5 (interp k=4) - Arm 4b (interp k=4),Arm 5 vs Arm 4b (iterative vs single-pass gating at k=4),-0.025677254571638053,-0.043305995969424325,-0.00811637599088484,0.0048,0.023
+N=2100 (Extension),comparison,447,Iter k=4 (no gate) - Arm 2 (fixed k=4),Iter k=4 vs Arm 2 (hop-conditioning alone at k=4),-0.022371364653243853,-0.03914988814317677,-0.005592841163310935,0.0132,0.039599999999999996
+Pooled (N=2640),bridge,2077,Arm 5 (interp k=4) - Iter k=4 (no gate),Arm 5 vs Iter k=4 (gating effect at k=4),-0.025680618882198747,-0.03280433845410058,-0.018640306980811032,0.0001,0.0005
+Pooled (N=2640),bridge,2077,Arm 5 (interp k=4) - Arm 2 (fixed k=4),Arm 5 vs Arm 2 (iter-gated vs fixed-k at k=4),-0.008829391149892563,-0.018693355117890324,0.0010422837437330454,0.0794,0.0794
+Pooled (N=2640),bridge,2077,Arm 4b (interp k=4) - Arm 2 (fixed k=4),Arm 4b vs Arm 2 (single-pass calib vs fixed-k at k=4),-0.026570775156475768,-0.03406598017265712,-0.01905210286966412,0.0001,0.0005
+Pooled (N=2640),bridge,2077,Arm 5 (interp k=4) - Arm 4b (interp k=4),Arm 5 vs Arm 4b (iterative vs single-pass gating at k=4),0.017741384006583205,0.008425994907561083,0.026886230891721926,0.0002,0.0006000000000000001
+Pooled (N=2640),bridge,2077,Iter k=4 (no gate) - Arm 2 (fixed k=4),Iter k=4 vs Arm 2 (hop-conditioning alone at k=4),0.016851227732306184,0.0077034183919114626,0.025764323543572453,0.0004,0.0008
+Pooled (N=2640),comparison,563,Arm 5 (interp k=4) - Iter k=4 (no gate),Arm 5 vs Iter k=4 (gating effect at k=4),-0.015097690941385467,-0.029336911251301487,-0.0009501091667765239,0.0374,0.0748
+Pooled (N=2640),comparison,563,Arm 5 (interp k=4) - Arm 2 (fixed k=4),Arm 5 vs Arm 2 (iter-gated vs fixed-k at k=4),-0.039076376554174175,-0.05650188413987731,-0.022125853623556145,0.0001,0.0005
+Pooled (N=2640),comparison,563,Arm 4b (interp k=4) - Arm 2 (fixed k=4),Arm 4b vs Arm 2 (single-pass calib vs fixed-k at k=4),-0.0018178285968029062,-0.013570782808617255,0.009491552479091985,0.7202,0.7202
+Pooled (N=2640),comparison,563,Arm 5 (interp k=4) - Arm 4b (interp k=4),Arm 5 vs Arm 4b (iterative vs single-pass gating at k=4),-0.03725854795737127,-0.053435490105833504,-0.020731508952926175,0.0001,0.0005
+Pooled (N=2640),comparison,563,Iter k=4 (no gate) - Arm 2 (fixed k=4),Iter k=4 vs Arm 2 (hop-conditioning alone at k=4),-0.023978685612788708,-0.039076376554174064,-0.00888099467140313,0.0024,0.0072
